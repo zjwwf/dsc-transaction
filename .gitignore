@@ -21,3 +21,4 @@ config-dev.properties
 /.metadata
 log.home
 */target
+/*/target
