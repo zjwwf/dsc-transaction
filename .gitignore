@@ -9,9 +9,10 @@ target
 *.class
 bin/
 .iml
-.ipr
+*.ipr
+*.iws
+/*.iml
 .orig
-.iws
 *.iml
 *.orig
 hb*.sh

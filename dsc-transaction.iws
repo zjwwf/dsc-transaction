@@ -5,129 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4f814132-fc32-4d16-b7ad-eac886cfeab8" name="Default Changelist" comment="gitigore提交">
-      <change afterPath="$PROJECT_DIR$/dsc-transaction.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dsc-transaction.ipr" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dsc-transaction.iws" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-api/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-api/src/main/java/com/zhuo/transaction/api/TcInitiator.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-api/src/main/java/com/zhuo/transaction/api/TcParticipant.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-api/target/classes/com/zhuo/transaction/api/TcInitiator.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-api/target/classes/com/zhuo/transaction/api/TcParticipant.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-api/target/maven-archiver/pom.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-api/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-api/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-api/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/createdFiles.lst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-api/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-api/target/transaction-api-1.0-SNAPSHOT.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-api/transaction-api.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-common/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-common/src/main/java/com/zhuo/transaction/common/commonEnum/ZkNodeTypeEnum.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-common/src/main/java/com/zhuo/transaction/common/exception/JsonParseException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-common/src/main/java/com/zhuo/transaction/common/exception/MapperException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-common/src/main/java/com/zhuo/transaction/common/exception/TransactionException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-common/src/main/java/com/zhuo/transaction/common/utils/Contants.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-common/src/main/java/com/zhuo/transaction/common/utils/ObjectMapperUtils.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-common/src/main/java/com/zhuo/transaction/common/utils/ReflectionUtils.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-common/src/main/java/com/zhuo/transaction/common/utils/UuidUtils.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-common/target/classes/com/zhuo/transaction/common/commonEnum/ZkNodeTypeEnum.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-common/target/classes/com/zhuo/transaction/common/exception/JsonParseException.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-common/target/classes/com/zhuo/transaction/common/exception/MapperException.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-common/target/classes/com/zhuo/transaction/common/exception/TransactionException.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-common/target/classes/com/zhuo/transaction/common/utils/Contants.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-common/target/classes/com/zhuo/transaction/common/utils/ObjectMapperUtils.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-common/target/classes/com/zhuo/transaction/common/utils/ReflectionUtils.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-common/target/classes/com/zhuo/transaction/common/utils/UuidUtils.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-common/target/maven-archiver/pom.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-common/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-common/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-common/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/createdFiles.lst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-common/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-common/target/transaction-common-1.0-SNAPSHOT.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-common/transaction-common.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-core/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-core/src/main/java/com/zhuo/transaction/InvocationContext.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-core/src/main/java/com/zhuo/transaction/MqMsg.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-core/src/main/java/com/zhuo/transaction/Participant.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-core/src/main/java/com/zhuo/transaction/Terminator.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-core/src/main/java/com/zhuo/transaction/Transaction.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-core/src/main/java/com/zhuo/transaction/TransactionManager.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-core/src/main/java/com/zhuo/transaction/cache/BeanFactory.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-core/src/main/java/com/zhuo/transaction/cache/ConsumerMethodInfoCache.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-core/src/main/java/com/zhuo/transaction/cache/ConsumerMsgExecuteCache.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-core/src/main/java/com/zhuo/transaction/cache/ParticipantServiceCache.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-core/src/main/java/com/zhuo/transaction/cache/ProducerExecuteCache.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-core/src/main/java/com/zhuo/transaction/context/TcServiceContext.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-core/src/main/java/com/zhuo/transaction/interceptor/TcInitiatorAspect.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-core/src/main/java/com/zhuo/transaction/interceptor/TcInitiatorInterceptor.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-core/src/main/java/com/zhuo/transaction/interceptor/TcParticipantAspect.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-core/src/main/java/com/zhuo/transaction/interceptor/TcParticipantInterceptor.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-core/src/main/java/com/zhuo/transaction/jms/AbstractTransactionConsumer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-core/src/main/java/com/zhuo/transaction/jms/AbstractTransactionProducer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-core/src/main/java/com/zhuo/transaction/jms/rocketmq/ConsumerMessageListener.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-core/src/main/java/com/zhuo/transaction/jms/rocketmq/RocketMqAbstractTransactionConsumer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-core/src/main/java/com/zhuo/transaction/jms/rocketmq/RocketMqAbstractTransactionProducer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-core/src/main/java/com/zhuo/transaction/jms/rocketmq/TransactionListenerImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-core/src/main/java/com/zhuo/transaction/support/BeanFactory.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-core/src/main/java/com/zhuo/transaction/support/FactoryBuilder.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-core/src/main/java/com/zhuo/transaction/utils/ParticipantServiceWatch.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-core/src/main/java/com/zhuo/transaction/utils/ZookeeperUtils.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-core/src/test/java/com/zhuo/transaction/test/Test.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-core/src/test/java/com/zhuo/transaction/test/ZookeeperTest1.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-core/src/test/java/com/zhuo/transaction/test/ZookeeperTest2.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-core/target/classes/com/zhuo/transaction/InvocationContext.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-core/target/classes/com/zhuo/transaction/MqMsg$MethodParam.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-core/target/classes/com/zhuo/transaction/MqMsg.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-core/target/classes/com/zhuo/transaction/Participant.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-core/target/classes/com/zhuo/transaction/Terminator.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-core/target/classes/com/zhuo/transaction/Transaction.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-core/target/classes/com/zhuo/transaction/TransactionManager.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-core/target/classes/com/zhuo/transaction/cache/BeanFactory.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-core/target/classes/com/zhuo/transaction/cache/ConsumerMethodInfoCache.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-core/target/classes/com/zhuo/transaction/cache/ConsumerMsgExecuteCache.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-core/target/classes/com/zhuo/transaction/cache/ParticipantServiceCache.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-core/target/classes/com/zhuo/transaction/cache/ProducerExecuteCache.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-core/target/classes/com/zhuo/transaction/context/TcServiceContext.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-core/target/classes/com/zhuo/transaction/interceptor/TcInitiatorAspect.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-core/target/classes/com/zhuo/transaction/interceptor/TcInitiatorInterceptor.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-core/target/classes/com/zhuo/transaction/interceptor/TcParticipantAspect.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-core/target/classes/com/zhuo/transaction/interceptor/TcParticipantInterceptor.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-core/target/classes/com/zhuo/transaction/jms/AbstractTransactionConsumer.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-core/target/classes/com/zhuo/transaction/jms/AbstractTransactionProducer.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-core/target/classes/com/zhuo/transaction/jms/rocketmq/ConsumerMessageListener.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-core/target/classes/com/zhuo/transaction/jms/rocketmq/RocketMqAbstractTransactionConsumer.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-core/target/classes/com/zhuo/transaction/jms/rocketmq/RocketMqAbstractTransactionProducer$1.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-core/target/classes/com/zhuo/transaction/jms/rocketmq/RocketMqAbstractTransactionProducer.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-core/target/classes/com/zhuo/transaction/jms/rocketmq/TransactionListenerImpl.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-core/target/classes/com/zhuo/transaction/support/BeanFactory.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-core/target/classes/com/zhuo/transaction/support/FactoryBuilder$SingeltonFactory.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-core/target/classes/com/zhuo/transaction/support/FactoryBuilder.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-core/target/classes/com/zhuo/transaction/utils/ParticipantServiceWatch.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-core/target/classes/com/zhuo/transaction/utils/ZookeeperUtils$1.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-core/target/classes/com/zhuo/transaction/utils/ZookeeperUtils.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-core/target/maven-archiver/pom.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-core/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-core/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-core/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/createdFiles.lst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-core/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-core/target/surefire-reports/TEST-com.zhuo.transaction.test.Test.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-core/target/surefire-reports/com.zhuo.transaction.test.Test.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-core/target/test-classes/com/zhuo/transaction/test/Test.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-core/target/test-classes/com/zhuo/transaction/test/ZookeeperTest1.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-core/target/test-classes/com/zhuo/transaction/test/ZookeeperTest2.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-core/target/transaction-core-1.0-SNAPSHOT.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-core/transaction-core.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-spring/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-spring/src/main/java/com/zhuo/transaction/spring/support/SpringBeanFactory.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-spring/target/classes/com/zhuo/transaction/spring/support/SpringBeanFactory.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-spring/target/maven-archiver/pom.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-spring/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-spring/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-spring/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/createdFiles.lst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-spring/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-spring/target/transaction-spring-1.0-SNAPSHOT.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transaction-spring/transaction-spring.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dsc-transaction.iws" beforeDir="false" afterPath="$PROJECT_DIR$/dsc-transaction.iws" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -206,8 +85,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/.gitignore">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="247">
-              <caret line="13" column="4" selection-start-line="13" selection-start-column="4" selection-end-line="13" selection-end-column="4" />
+            <state relative-caret-position="418">
+              <caret line="22" lean-forward="true" selection-start-line="22" selection-end-line="22" />
             </state>
           </provider>
         </entry>
@@ -472,7 +351,7 @@
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1598459076357" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1598459289025" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="project.structure.last.edited" value="Modules" />
@@ -572,7 +451,7 @@
       <workItem from="1598233445426" duration="11572000" />
       <workItem from="1598323601644" duration="7970000" />
       <workItem from="1598424012897" duration="4252000" />
-      <workItem from="1598457293421" duration="1754000" />
+      <workItem from="1598457293421" duration="1990000" />
     </task>
     <task id="LOCAL-00001" summary="gitigore提交">
       <created>1598458785593</created>
@@ -581,11 +460,18 @@
       <option name="project" value="LOCAL" />
       <updated>1598458785593</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="gitigore提交">
+      <created>1598459067399</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1598459067399</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="91995000" />
+    <option name="totallyTimeSpent" value="92231000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
@@ -1677,8 +1563,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="247">
-          <caret line="13" column="4" selection-start-line="13" selection-start-column="4" selection-end-line="13" selection-end-column="4" />
+        <state relative-caret-position="418">
+          <caret line="22" lean-forward="true" selection-start-line="22" selection-end-line="22" />
         </state>
       </provider>
     </entry>
