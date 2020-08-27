@@ -6,6 +6,8 @@ import org.apache.rocketmq.client.producer.LocalTransactionState;
 import org.apache.rocketmq.client.producer.TransactionListener;
 import org.apache.rocketmq.common.message.Message;
 import org.apache.rocketmq.common.message.MessageExt;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * describe:
@@ -15,9 +17,7 @@ import org.apache.rocketmq.common.message.MessageExt;
  */
 public class TransactionListenerImpl implements TransactionListener {
 
-    TransactionListenerImpl(){
-
-    }
+    private static Logger logger = LoggerFactory.getLogger(TransactionListenerImpl.class);
 
     @Override
     public LocalTransactionState executeLocalTransaction(Message msg, Object arg) {
@@ -30,7 +30,7 @@ public class TransactionListenerImpl implements TransactionListener {
             }
             return LocalTransactionState.COMMIT_MESSAGE;
         }catch (Exception e){
-            e.printStackTrace();
+            logger.error(e.getMessage(),e);
             return LocalTransactionState.ROLLBACK_MESSAGE;
         }
     }

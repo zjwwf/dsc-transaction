@@ -12,6 +12,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
 import org.apache.rocketmq.common.consumer.ConsumeFromWhere;
 import org.apache.rocketmq.common.protocol.heartbeat.MessageModel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
@@ -23,12 +25,10 @@ import java.util.List;
  */
 public class RocketMqAbstractTransactionConsumer extends AbstractTransactionConsumer {
 
+    private static Logger logger = LoggerFactory.getLogger(RocketMqAbstractTransactionConsumer.class);
     private String namesrvAddr;
-
     private String basePackage;
-
     private String zkServer;
-
     private String serviceName;
 
     @Override
@@ -67,7 +67,7 @@ public class RocketMqAbstractTransactionConsumer extends AbstractTransactionCons
             // 07开启
             consumer.start();
         }catch (Exception e){
-            e.printStackTrace();
+            logger.error(e.getMessage(),e);
         }
     }
 

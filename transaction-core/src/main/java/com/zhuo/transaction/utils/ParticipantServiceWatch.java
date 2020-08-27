@@ -16,11 +16,7 @@ import java.util.List;
 public class ParticipantServiceWatch implements Watcher {
     @Override
     public void process(WatchedEvent watchedEvent) {
-        List<String> children = ZookeeperUtils.getChildren(Contants.BASE_ZOOKEEPER_SERVICE_DIR.substring(0, Contants.BASE_ZOOKEEPER_SERVICE_DIR.length() - 1));
-        ParticipantServiceCache.clear();
-        for(String str : children){
-            ParticipantServiceCache.set(str,str);
-        }
+        ZookeeperUtils.cacheParticipantService();
         ZookeeperUtils.registerChildrenWatcher(Contants.BASE_ZOOKEEPER_SERVICE_DIR.substring(1,Contants.BASE_ZOOKEEPER_SERVICE_DIR.length()-1));
     }
 }

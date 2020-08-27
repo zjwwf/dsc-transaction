@@ -15,8 +15,9 @@ import org.apache.rocketmq.client.producer.TransactionListener;
 import org.apache.rocketmq.client.producer.TransactionMQProducer;
 import org.apache.rocketmq.common.message.Message;
 import org.apache.rocketmq.remoting.common.RemotingHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.*;
 import java.util.stream.Collectors;
@@ -28,6 +29,9 @@ import java.util.stream.Collectors;
  * @date 2020/08/19
  */
 public class RocketMqAbstractTransactionProducer extends AbstractTransactionProducer {
+
+
+    private static Logger logger = LoggerFactory.getLogger(RocketMqAbstractTransactionConsumer.class);
 
     private String namesrvAddr;
     private TransactionListener transactionListener;
@@ -42,15 +46,14 @@ public class RocketMqAbstractTransactionProducer extends AbstractTransactionProd
         if(StringUtils.isBlank(zkServer)){
             throw new TransactionException("参与者没有配置zk地址");
         }
+        //zk
         if(ZookeeperUtils.zookeeper == null){
             ZookeeperUtils.init(zkServer);
         }
-        List<String> children = ZookeeperUtils.getChildren(Contants.BASE_ZOOKEEPER_SERVICE_DIR.substring(0, Contants.BASE_ZOOKEEPER_SERVICE_DIR.length() - 1));
-        ParticipantServiceCache.clear();
-        for(String str : children){
-            ParticipantServiceCache.set(str,str);
-        }
+        ZookeeperUtils.registerChildrenWatcher(Contants.BASE_ZOOKEEPER_SERVICE_DIR.substring(1,Contants.BASE_ZOOKEEPER_SERVICE_DIR.length()-1));
+        ZookeeperUtils.cacheParticipantService();
         transactionListener = new TransactionListenerImpl();
+        List<String> children = ZookeeperUtils.getChildren(Contants.BASE_ZOOKEEPER_SERVICE_DIR.substring(0, Contants.BASE_ZOOKEEPER_SERVICE_DIR.length() - 1));
         String groupId = children.stream().map(s -> super.GROUP_ID + "_" + s).collect(Collectors.joining("|"));
         producer = new TransactionMQProducer(super.GROUP_ID);
         producer.setSendMsgTimeout(super.sendMsgTime);
@@ -68,7 +71,7 @@ public class RocketMqAbstractTransactionProducer extends AbstractTransactionProd
         try{
             producer.start();
         }catch (Exception e){
-            e.printStackTrace();
+            logger.error(e.getMessage(),e);
         }
     }
     @Override
@@ -76,24 +79,39 @@ public class RocketMqAbstractTransactionProducer extends AbstractTransactionProd
         //根据transaction 发送msg
         SendResult sendResult = null;
         try {
+            int i = 1/0;
             String sendMsg = ObjectMapperUtils.toJsonString(transaction);
             MqMsg mqMsg = ObjectMapperUtils.parseJson(transaction.getBody(), MqMsg.class);
             List<String> participantServiceList = mqMsg.getParticipantService();
             //判断参与者是否启动
             if(!participantStartOrNot(participantServiceList)){
-                throw new TransactionException("参与者没有启动");
+                //读取一次zookeeper，再次确认
+                if(!participantStartOrNotAgain(participantServiceList)){
+                    throw new TransactionException("参与者没有启动");
+                }
             }
+            tc.getTcServiceContext().setTransactionId(transaction.getId());
             for(String participantService : participantServiceList){
                 Message msg = new Message(super.TOPIC+"_"+participantService,
                         sendMsg.getBytes(RemotingHelper.DEFAULT_CHARSET));
                 producer.sendMessageInTransaction(msg, tc.getTcServiceContext());
             }
         }catch (Exception e){
-            e.printStackTrace();
+            logger.error(e.getMessage(),e);
             throw new TransactionException(e.getMessage());
         }
 
 
+    }
+
+    /**
+     *  取取zookeeper，判断参与者是否启动
+     * @param participantServiceList
+     * @return
+     */
+    private boolean participantStartOrNotAgain(List<String> participantServiceList) {
+        ZookeeperUtils.cacheParticipantService();
+        return participantStartOrNot(participantServiceList);
     }
 
     /**

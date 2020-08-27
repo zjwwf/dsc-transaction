@@ -12,6 +12,8 @@ import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyContext;
 import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyStatus;
 import org.apache.rocketmq.client.consumer.listener.MessageListenerConcurrently;
 import org.apache.rocketmq.common.message.MessageExt;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Method;
 import java.util.List;
@@ -25,6 +27,7 @@ import java.util.Map;
  */
 public class ConsumerMessageListener implements MessageListenerConcurrently {
 
+    private static Logger logger = LoggerFactory.getLogger(ConsumerMessageListener.class);
     private long st = 0L;
     public ConsumerMessageListener(){
 
@@ -54,10 +57,10 @@ public class ConsumerMessageListener implements MessageListenerConcurrently {
                     ConsumerMsgExecuteCache.set(transaction.getId(),transaction.getId());
                 }
             }catch (JsonParseException e){
-                e.printStackTrace();
+                logger.error(e.getMessage(),e);
                 continue;
             } catch (Exception e) {
-                e.printStackTrace();
+                logger.error(e.getMessage(),e);
                 //todo 失败一定次数进行处理，加入消息表获取其他操作
                 return ConsumeConcurrentlyStatus.RECONSUME_LATER;
             }

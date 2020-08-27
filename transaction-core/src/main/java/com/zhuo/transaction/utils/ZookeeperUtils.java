@@ -1,6 +1,7 @@
 package com.zhuo.transaction.utils;
 
 import com.zhuo.transaction.cache.BeanFactory;
+import com.zhuo.transaction.cache.ParticipantServiceCache;
 import com.zhuo.transaction.common.commonEnum.ZkNodeTypeEnum;
 import com.zhuo.transaction.common.utils.Contants;
 import com.zhuo.transaction.jms.rocketmq.RocketMqAbstractTransactionConsumer;
@@ -41,7 +42,6 @@ public class ZookeeperUtils {
                 }
             });
         }
-        registerChildrenWatcher(Contants.BASE_ZOOKEEPER_SERVICE_DIR.substring(1,Contants.BASE_ZOOKEEPER_SERVICE_DIR.length()-1));
 //        countDownLatch.await();
         LOG.info("zookeeper connection success");
     }
@@ -52,7 +52,7 @@ public class ZookeeperUtils {
             }
             zookeeper.getChildren(Contants.BASE_ZOOKEEPER_SERVICE_DIR.substring(0,Contants.BASE_ZOOKEEPER_SERVICE_DIR.length()-1),(Watcher) BeanFactory.get("participantServiceWatch"));
         }catch (Exception e){
-            e.printStackTrace();
+            LOG.error(e.getMessage(),e);
         }
     }
 
@@ -69,9 +69,8 @@ public class ZookeeperUtils {
             }catch (Exception er){
                 LOG.error(e.getMessage(),e);
             }
-            e.printStackTrace();
+            LOG.error(e.getMessage(),e);
         } catch (Exception e){
-            e.printStackTrace();
             LOG.error("Zookeeper无法链接，Ip："+zkHost);
             LOG.error(e.getMessage(),e);
         }
@@ -113,10 +112,9 @@ public class ZookeeperUtils {
             }catch (Exception er){
                 LOG.error(e.getMessage(),e);
             }
-            e.printStackTrace();
+            LOG.error(e.getMessage(),e);
         }catch (Exception e){
             LOG.error(e.getMessage(),e);
-            e.printStackTrace();
             return false;
         }
         return true;
@@ -150,9 +148,8 @@ public class ZookeeperUtils {
             }catch (Exception er){
                 LOG.error(e.getMessage(),e);
             }
-            e.printStackTrace();
+            LOG.error(e.getMessage(),e);
         }catch (Exception e){
-            e.printStackTrace();
             LOG.error(e.getMessage(),e);
             return false;
         }
@@ -176,9 +173,8 @@ public class ZookeeperUtils {
             }catch (Exception er){
                 LOG.error(e.getMessage(),e);
             }
-            e.printStackTrace();
+            LOG.error(e.getMessage(),e);
         }catch (Exception e){
-            e.printStackTrace();
             LOG.error(e.getMessage(),e);
             return false;
         }
@@ -196,7 +192,6 @@ public class ZookeeperUtils {
             Stat stat = zookeeper.exists(path, false);
             return String.valueOf(stat.getCtime());
         }catch (KeeperException.SessionExpiredException e){
-
             LOG.error("会话超时");
             try{
                 zookeeper.close();
@@ -206,10 +201,9 @@ public class ZookeeperUtils {
             }catch (Exception er){
                 LOG.error(e.getMessage(),e);
             }
-            e.printStackTrace();
+            LOG.error(e.getMessage(),e);
             return null;
         }catch (Exception e){
-            e.printStackTrace();
             LOG.error(e.getMessage(),e);
             return null;
         }
@@ -227,6 +221,7 @@ public class ZookeeperUtils {
             childenNum = zookeeper.getChildren(path, false).size();
         }catch (KeeperException.SessionExpiredException e){
             LOG.error("会话超时");
+            LOG.error(e.getMessage(),e);
             try{
                 zookeeper.close();
                 creatAgain();
@@ -234,9 +229,7 @@ public class ZookeeperUtils {
             }catch (Exception er){
                 LOG.error(e.getMessage(),e);
             }
-            e.printStackTrace();
         }catch (Exception e){
-            e.printStackTrace();
             LOG.error(e.getMessage(),e);
         }
         return childenNum;
@@ -247,6 +240,7 @@ public class ZookeeperUtils {
             list = zookeeper.getChildren(path, false);
         }catch (KeeperException.SessionExpiredException e){
             LOG.error("会话超时");
+            LOG.error(e.getMessage(),e);
             try{
                 zookeeper.close();
                 creatAgain();
@@ -254,9 +248,7 @@ public class ZookeeperUtils {
             }catch (Exception er){
                 LOG.error(e.getMessage(),e);
             }
-            e.printStackTrace();
         }catch (Exception e){
-            e.printStackTrace();
             LOG.error(e.getMessage(),e);
         }
         return list;
@@ -274,6 +266,7 @@ public class ZookeeperUtils {
             return new String(data);
         }catch (KeeperException.SessionExpiredException e){
             LOG.error("会话超时");
+            LOG.error(e.getMessage(),e);
             try{
                 zookeeper.close();
                 creatAgain();
@@ -282,10 +275,8 @@ public class ZookeeperUtils {
             }catch (Exception er){
                 LOG.error(e.getMessage(),e);
             }
-            e.printStackTrace();
             return null;
         }catch (Exception e){
-            e.printStackTrace();
             LOG.error(e.getMessage(),e);
             return null;
         }
@@ -302,6 +293,7 @@ public class ZookeeperUtils {
             stat = zookeeper.exists(path, true);
         }catch (KeeperException.SessionExpiredException e){
             LOG.error("会话超时");
+            LOG.error(e.getMessage(),e);
             try{
                 zookeeper.close();
                 creatAgain();
@@ -309,15 +301,20 @@ public class ZookeeperUtils {
             }catch (Exception er){
                 LOG.error(e.getMessage(),e);
             }
-            e.printStackTrace();
         }catch (Exception e){
             LOG.error(e.getMessage(),e);
-            e.printStackTrace();
         }
         if(stat == null) {
             return false;
         } else {
             return true;
+        }
+    }
+    public static void cacheParticipantService(){
+        List<String> children = ZookeeperUtils.getChildren(Contants.BASE_ZOOKEEPER_SERVICE_DIR.substring(0, Contants.BASE_ZOOKEEPER_SERVICE_DIR.length() - 1));
+        ParticipantServiceCache.clear();
+        for(String str : children){
+            ParticipantServiceCache.set(str,str);
         }
     }
 
@@ -336,7 +333,7 @@ public class ZookeeperUtils {
             RocketMqAbstractTransactionConsumer consumer = (RocketMqAbstractTransactionConsumer)target;
             System.out.println(consumer.getServiceName());
         }
-//        String shardName = SystemUtils.getSystemEnv("SERARCH_INDEX");
-//        ZookeeperUtils.createNode(Contant.PROJECT_EXITS_NODE,shardName,ZkNodeTypeEnum.zkNodeType_4.getCode());
     }
+
+
 }

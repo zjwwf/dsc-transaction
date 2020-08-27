@@ -2,8 +2,6 @@ package com.zhuo.transaction.cache;
 
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -14,7 +12,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @date 2020/08/26
  */
 public class ProducerExecuteCache {
-    private final static Integer MAP_NUM = 4;
+    private final static Integer MAP_NUM = 1000;
     private static AtomicInteger flag =new AtomicInteger(1);
     private final static ConcurrentHashMap<String,String> cacheMap1 = new ConcurrentHashMap<>();
     private final static ConcurrentHashMap<String,String> cacheMap2 = new ConcurrentHashMap<>();
@@ -29,7 +27,7 @@ public class ProducerExecuteCache {
                 cacheMap1.put(key,value);
             }
         }else{
-            if(cacheMap1.size() >= MAP_NUM / 2){
+            if(cacheMap2.size() >= MAP_NUM / 2){
                 cacheMap1.clear();
                 cacheMap1.put(key,value);
                 flag.set(1);
