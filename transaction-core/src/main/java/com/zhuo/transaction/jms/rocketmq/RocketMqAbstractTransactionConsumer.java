@@ -10,8 +10,6 @@ import com.zhuo.transaction.jms.AbstractTransactionConsumer;
 import com.zhuo.transaction.utils.ZookeeperUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
-import org.apache.rocketmq.common.consumer.ConsumeFromWhere;
-import org.apache.rocketmq.common.protocol.heartbeat.MessageModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -64,6 +62,7 @@ public class RocketMqAbstractTransactionConsumer extends AbstractTransactionCons
             consumer.subscribe(super.TOPIC+"_"+serviceName,"*");
             //05注册监听器
             consumer.registerMessageListener(new ConsumerMessageListener(System.currentTimeMillis()));
+
             // 07开启
             consumer.start();
         }catch (Exception e){

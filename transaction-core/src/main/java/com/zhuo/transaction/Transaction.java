@@ -2,6 +2,8 @@ package com.zhuo.transaction;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import java.util.Date;
+
 /**
  * describe:
  *
@@ -15,6 +17,13 @@ public class Transaction {
     private String body;
     private Integer tryTime;
     private Integer status;
+    private String cancalMethod;
+    private Object[] cancalMethodParam;
+    private String confirmMethod;
+    private Object[] confirmMethodParam;
+    private Integer transactionType;
+    private Date createTime;
+    private Date updateTime;
 
     public String getId() {
         return id;
@@ -46,5 +55,61 @@ public class Transaction {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public String getCancalMethod() {
+        return cancalMethod;
+    }
+
+    public void setCancalMethod(String cancalMethod) {
+        this.cancalMethod = cancalMethod;
+    }
+
+    public String getConfirmMethod() {
+        return confirmMethod;
+    }
+
+    public void setConfirmMethod(String confirmMethod) {
+        this.confirmMethod = confirmMethod;
+    }
+
+    public Integer getTransactionType() {
+        return transactionType;
+    }
+
+    public void setTransactionType(Integer transactionType) {
+        this.transactionType = transactionType;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public Object[] getCancalMethodParam() {
+        return cancalMethodParam;
+    }
+
+    public void setCancalMethodParam(Object[] cancalMethodParam) {
+        this.cancalMethodParam = cancalMethodParam;
+    }
+
+    public Object[] getConfirmMethodParam() {
+        return confirmMethodParam;
+    }
+
+    public void setConfirmMethodParam(Object[] confirmMethodParam) {
+        this.confirmMethodParam = confirmMethodParam;
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
     }
 }

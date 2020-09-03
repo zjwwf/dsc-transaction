@@ -29,20 +29,14 @@ public class ZookeeperUtils {
 
     public static ZooKeeper zookeeper = null;
 
-    public static CountDownLatch countDownLatch = new CountDownLatch(1);
-
     public static void connectZookeeper() throws Exception{
         if(zookeeper == null) {
             zookeeper = new ZooKeeper(zkHost, 50000, new Watcher() {
                 @Override
                 public void process(WatchedEvent watchedEvent) {
-                    System.out.println("-----");
-                    System.out.println(watchedEvent.getState());
-                    System.out.println("-----------");
                 }
             });
         }
-//        countDownLatch.await();
         LOG.info("zookeeper connection success");
     }
     public static void registerChildrenWatcher(String path) {

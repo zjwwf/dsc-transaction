@@ -50,6 +50,22 @@ public final class FactoryBuilder {
         return classFactoryMap.get(clazz);
     }
 
+    /**
+     * 获取spring 中的beam
+     * @param clazz
+     * @param <T>
+     * @return
+     */
+    public static <T> T getSpringSingeltonBean(Class<T> clazz) {
+        for (BeanFactory beanFactory : beanFactories) {
+            if (beanFactory.isFactoryOf(clazz)) {
+                return beanFactory.getBean(clazz);
+            }
+        }
+        return null;
+    }
+
+
     public static void registerBeanFactory(BeanFactory beanFactory) {
         beanFactories.add(beanFactory);
     }

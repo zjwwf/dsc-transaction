@@ -4,6 +4,7 @@ import com.zhuo.transaction.InvocationContext;
 import com.zhuo.transaction.Participant;
 import com.zhuo.transaction.TransactionManager;
 import com.zhuo.transaction.common.utils.ReflectionUtils;
+import com.zhuo.transaction.context.TcInitiatorContext;
 import com.zhuo.transaction.context.TcServiceContext;
 import com.zhuo.transaction.jms.AbstractTransactionProducer;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -35,8 +36,11 @@ public class TcInitiatorInterceptor {
         Participant participant  = new Participant(paramInfoInvocation);
         participant.buildParamInfo(tcServiceContext);
         this.tc.setTcServiceContext(tcServiceContext);
-
         transactionProducer.sendTcMsg(tc,tc.getTransaction());
+
+        TcInitiatorContext tcInitiatorContext = new TcInitiatorContext();
+        tcInitiatorContext.buildParamContent(tcServiceContext.getMethod(),tcServiceContext.getPjp());
+        this.tc.setTcInitiatorContext(tcInitiatorContext);
         return null;
     }
 }

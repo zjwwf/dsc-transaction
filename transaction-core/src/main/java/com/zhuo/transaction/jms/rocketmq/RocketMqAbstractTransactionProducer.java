@@ -3,11 +3,14 @@ package com.zhuo.transaction.jms.rocketmq;
 import com.zhuo.transaction.MqMsg;
 import com.zhuo.transaction.Transaction;
 import com.zhuo.transaction.TransactionManager;
+import com.zhuo.transaction.TransactionRepository;
 import com.zhuo.transaction.cache.ParticipantServiceCache;
+import com.zhuo.transaction.common.commonEnum.TransactionTypeEnum;
 import com.zhuo.transaction.common.exception.TransactionException;
 import com.zhuo.transaction.common.utils.Contants;
 import com.zhuo.transaction.common.utils.ObjectMapperUtils;
 import com.zhuo.transaction.jms.AbstractTransactionProducer;
+import com.zhuo.transaction.utils.TransactionRepositoryUtils;
 import com.zhuo.transaction.utils.ZookeeperUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.rocketmq.client.producer.SendResult;
@@ -79,7 +82,6 @@ public class RocketMqAbstractTransactionProducer extends AbstractTransactionProd
         //根据transaction 发送msg
         SendResult sendResult = null;
         try {
-            int i = 1/0;
             String sendMsg = ObjectMapperUtils.toJsonString(transaction);
             MqMsg mqMsg = ObjectMapperUtils.parseJson(transaction.getBody(), MqMsg.class);
             List<String> participantServiceList = mqMsg.getParticipantService();
@@ -90,6 +92,9 @@ public class RocketMqAbstractTransactionProducer extends AbstractTransactionProd
                     throw new TransactionException("参与者没有启动");
                 }
             }
+            //写入事务消息表
+            transaction.setTransactionType(TransactionTypeEnum.mq_rocketmq.getCode());
+            TransactionRepositoryUtils.create(transaction);
             tc.getTcServiceContext().setTransactionId(transaction.getId());
             for(String participantService : participantServiceList){
                 Message msg = new Message(super.TOPIC+"_"+participantService,
@@ -100,8 +105,6 @@ public class RocketMqAbstractTransactionProducer extends AbstractTransactionProd
             logger.error(e.getMessage(),e);
             throw new TransactionException(e.getMessage());
         }
-
-
     }
 
     /**

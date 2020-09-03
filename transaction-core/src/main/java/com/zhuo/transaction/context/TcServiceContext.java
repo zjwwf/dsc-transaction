@@ -16,14 +16,10 @@ import java.lang.reflect.Method;
 public class TcServiceContext {
 
     ProceedingJoinPoint pjp = null;
-
     Method method = null;
-
     TcInitiator tcInitiator;
-
     //调用方参数
     private String paramInfo;
-
     private String transactionId;
 
     public TcServiceContext(ProceedingJoinPoint pjp){

@@ -15,4 +15,5 @@ import java.lang.annotation.Target;
 @Target({ElementType.METHOD})
 public @interface TcInitiator {
     String paramMethod() default "";
+    String cancalMethod() default "";
 }

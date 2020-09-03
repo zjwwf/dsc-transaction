@@ -23,13 +23,10 @@
         <rocketmq.version>4.6.0</rocketmq.version>
         <fasterxml.jackson.version>2.11.0</fasterxml.jackson.version>
         <zookeeper.version>3.4.10</zookeeper.version>
+        <esotericsoftware.version>4.0.2</esotericsoftware.version>
+        <quartz.version>2.3.2</quartz.version>
+        <springframework.version>5.1.17.RELEASE</springframework.version>
     </properties>
-    <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.1.6.RELEASE</version>
-        <!--<relativePath/>-->
-    </parent>
     <dependencies>
 
     </dependencies>
@@ -71,16 +68,14 @@
                 <groupId>mysql</groupId>
                 <artifactId>mysql-connector-java</artifactId>
             </dependency>
+
+            <!--Spring -->
             <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-web</artifactId>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.springframework.boot</groupId>
-                        <artifactId>spring-boot-starter-json</artifactId>
-                    </exclusion>
-                </exclusions>
-                <version>2.1.6.RELEASE</version>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-framework-bom</artifactId>
+                <version>${springframework.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
             </dependency>
             <!--rocketmq -->
             <dependency>
@@ -127,6 +122,18 @@
                         <artifactId>slf4j-log4j12</artifactId>
                     </exclusion>
                 </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>com.esotericsoftware</groupId>
+                <artifactId>kryo</artifactId>
+                <version>${esotericsoftware.version}</version>
+            </dependency>
+
+            <!--定时任务 -->
+            <dependency>
+                <groupId>org.quartz-scheduler</groupId>
+                <artifactId>quartz</artifactId>
+                <version>${quartz.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

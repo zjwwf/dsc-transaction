@@ -4,9 +4,12 @@ import com.zhuo.transaction.MqMsg;
 import com.zhuo.transaction.Transaction;
 import com.zhuo.transaction.cache.ConsumerMethodInfoCache;
 import com.zhuo.transaction.cache.ConsumerMsgExecuteCache;
+import com.zhuo.transaction.common.commonEnum.TransactionMsgStatusEnum;
 import com.zhuo.transaction.common.exception.JsonParseException;
+import com.zhuo.transaction.common.utils.Contants;
 import com.zhuo.transaction.common.utils.ObjectMapperUtils;
 import com.zhuo.transaction.support.FactoryBuilder;
+import com.zhuo.transaction.utils.TransactionRepositoryUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyContext;
 import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyStatus;
@@ -42,9 +45,11 @@ public class ConsumerMessageListener implements MessageListenerConcurrently {
             if(msg.getStoreTimestamp() < st){
                 continue;
             }
+            String transactionId = null;
             try {
                 String msgBody = new String(msg.getBody(),"utf-8");
                 Transaction transaction = ObjectMapperUtils.parseJson(msgBody, Transaction.class);
+                transactionId = transaction.getId();
                 //之前已经执行过，多条msg有可能其中一条已经成功执行，其他失败，进行消息的重发
                 if (ConsumerMsgExecuteCache.get(transaction.getId()) != null){
                     continue;
@@ -61,7 +66,10 @@ public class ConsumerMessageListener implements MessageListenerConcurrently {
                 continue;
             } catch (Exception e) {
                 logger.error(e.getMessage(),e);
-                //todo 失败一定次数进行处理，加入消息表获取其他操作
+                TransactionRepositoryUtils.updateStatus(transactionId, TransactionMsgStatusEnum.code_3.getCode());
+                if(msg.getReconsumeTimes() == Contants.CONSUMER_RECONSUMETIMES){
+                    return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
+                }
                 return ConsumeConcurrentlyStatus.RECONSUME_LATER;
             }
         }
