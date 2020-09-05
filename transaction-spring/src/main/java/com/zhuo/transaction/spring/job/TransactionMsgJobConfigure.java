@@ -18,8 +18,11 @@ import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 public class TransactionMsgJobConfigure {
 
     private Scheduler scheduler;
-    private String cronExpression;
+    private String cronExpression  = "0 */1 * * * ?";
+    private Integer batchSize = 10;
+    public TransactionMsgJobConfigure(){
 
+    }
     public TransactionMsgJobConfigure(String cronExpression){
         this.cronExpression = cronExpression;
     }
@@ -29,6 +32,7 @@ public class TransactionMsgJobConfigure {
             scheduler = schedulerfactory.getScheduler();
             MethodInvokingJobDetailFactoryBean jobDetail = new MethodInvokingJobDetailFactoryBean();
             TransactionMsgJob transactionMsgJob = FactoryBuilder.factoryOf(TransactionMsgJob.class, TransactionMsgJob.class).getInstance();
+            transactionMsgJob.setBactchSize(batchSize);
             jobDetail.setTargetObject(transactionMsgJob);
             jobDetail.setTargetMethod("execute");
             jobDetail.setName("TransactionMsgJob");
@@ -45,5 +49,9 @@ public class TransactionMsgJobConfigure {
         } catch (Exception e) {
             throw new TransactionException("transactionMsgJobConfigure start fail");
         }
+    }
+
+    public void setBatchSize(Integer batchSize) {
+        this.batchSize = batchSize;
     }
 }

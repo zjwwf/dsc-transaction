@@ -89,7 +89,7 @@ public class JdbcTransactionRepository extends AbstractCachableTransactionReposi
 
     @Override
     protected int doDelete(String transactionId) {
-        String sql = "DELETE FROM dsc_transaction WHERE id = ？";
+        String sql = "DELETE FROM dsc_transaction WHERE id = ?";
         Connection  connection = null;
         PreparedStatement stmt = null;
         try {
@@ -151,7 +151,8 @@ public class JdbcTransactionRepository extends AbstractCachableTransactionReposi
 
     @Override
     protected List<Transaction> doGetFailTranMsgList() {
-        String sql = "SELECT * FROM dsc_transaction WHERE `status` = 3 AND update_time < ? ORDER BY update_time  LIMIT 10";
+        String sql = "SELECT "+getColumns()+" FROM dsc_transaction WHERE `status` = 3 AND update_time < ? " +
+                "and cancal_method is not null and  cancal_method != '' ORDER BY update_time  LIMIT 10";
         Connection  connection = null;
         PreparedStatement stmt = null;
         List<Transaction> result = new ArrayList<>();
@@ -184,12 +185,21 @@ public class JdbcTransactionRepository extends AbstractCachableTransactionReposi
         tc.setConfirmMethod(resultSet.getString("confirm_method"));
         byte[] cancalMethodParams = resultSet.getBytes("cancal_method_param");
         if(cancalMethodParams != null && cancalMethodParams.length > 0) {
-            tc.setCancalMethodParam((Object[]) serializer.deserialize(cancalMethodParams));
+            try {
+                tc.setCancalMethodParam((Object[]) serializer.deserialize(cancalMethodParams));
+            }catch (Exception e){
+                logger.error("serializer fail，"+e.getMessage());
+            }
         }
         tc.setTransactionType(resultSet.getInt("transaction_type"));
         byte[] confirmMethodParams = resultSet.getBytes("confirm_method_param");
         if(confirmMethodParams != null && confirmMethodParams.length > 0) {
-            tc.setConfirmMethodParam((Object[]) serializer.deserialize(confirmMethodParams));
+
+            try {
+                tc.setConfirmMethodParam((Object[]) serializer.deserialize(confirmMethodParams));
+            }catch (Exception e){
+                logger.error("serializer fail，"+e.getMessage());
+            }
         }
         tc.setCreateTime(resultSet.getDate("create_time"));
         tc.setUpdateTime(resultSet.getDate("update_time"));

@@ -25,18 +25,17 @@ public class TransactionRepositoryUtils {
      * @param tc
      */
     public static void create(Transaction tc){
-        if(!checkRepository()){
-            return;
-        }
-        if (tc == null ||StringUtils.isBlank(tc.getId())){
-            logger.error("create transaction table fail，transaction is empty");
-            throw new TransactionException("create transaction table fail，transaction is empty");
-        }
-        TransactionRepository transactionRepository = FactoryBuilder.getSpringSingeltonBean(TransactionRepository.class);
-        int rc = transactionRepository.create(tc);
-        if(rc == 0){
-            logger.error("create transaction table fail");
-            throw new TransactionException("create transaction table fail");
+        if(checkRepository()) {
+            if (tc == null || StringUtils.isBlank(tc.getId())) {
+                logger.error("create transaction table fail，transaction is empty");
+                throw new TransactionException("create transaction table fail，transaction is empty");
+            }
+            TransactionRepository transactionRepository = FactoryBuilder.getSpringSingeltonBean(TransactionRepository.class);
+            int rc = transactionRepository.create(tc);
+            if (rc == 0) {
+                logger.error("create transaction table fail");
+                throw new TransactionException("create transaction table fail");
+            }
         }
     }
     /**
@@ -45,28 +44,27 @@ public class TransactionRepositoryUtils {
      * @param statusCode
      */
     public static void updateStatus(String id,int statusCode){
-        if(!checkRepository()){
-            return;
-        }
-        TransactionRepository transactionRepository = FactoryBuilder.getSpringSingeltonBean(TransactionRepository.class);
-        if(StringUtils.isBlank(id)){
-            logger.error("update transaction table fail，transactionId is empty");
-            throw new TransactionException("update transaction table fail，transactionId is empty");
-        }
-        Transaction oldtc = transactionRepository.getById(id);
-        try{
-            if(oldtc == null){
-                logger.error("update transaction msg is empty");
-                throw new TransactionException("update transaction msg is empty");
-            }else{
-                int rc = transactionRepository.updateStatus(id, statusCode);
-                if(rc == 0){
-                    logger.error("update transaction table fail");
-                    throw new TransactionException("update transaction table fail");
-                }
+        if(checkRepository()) {
+            TransactionRepository transactionRepository = FactoryBuilder.getSpringSingeltonBean(TransactionRepository.class);
+            if (StringUtils.isBlank(id)) {
+                logger.error("update transaction table fail，transactionId is empty");
+                throw new TransactionException("update transaction table fail，transactionId is empty");
             }
-        }catch (Exception e){
-            logger.error("transaction table update fail,"+e.getMessage(),e);
+            Transaction oldtc = transactionRepository.getById(id);
+            try {
+                if (oldtc == null) {
+                    logger.error("update transaction msg is empty");
+                    throw new TransactionException("update transaction msg is empty");
+                } else {
+                    int rc = transactionRepository.updateStatus(id, statusCode);
+                    if (rc == 0) {
+                        logger.error("update transaction table fail");
+                        throw new TransactionException("update transaction table fail");
+                    }
+                }
+            } catch (Exception e) {
+                logger.error("transaction table update fail," + e.getMessage(), e);
+            }
         }
 
     }
@@ -76,21 +74,20 @@ public class TransactionRepositoryUtils {
      * @param id
      */
     public static void addTryTime(String id){
-        if(!checkRepository()){
-            return;
-        }
-        TransactionRepository transactionRepository = FactoryBuilder.getSpringSingeltonBean(TransactionRepository.class);
-        if(StringUtils.isBlank(id)){
-            throw new TransactionException("transaction msg add tryTime fail，transactionId is empty");
-        }
-        try{
-            int rc = transactionRepository.addTryTime(id);
-            if(rc == 0){
-                logger.error("transaction msg add tryTime fail");
-                throw new TransactionException("transaction msg add tryTime fail");
+        if(checkRepository()) {
+            TransactionRepository transactionRepository = FactoryBuilder.getSpringSingeltonBean(TransactionRepository.class);
+            if (StringUtils.isBlank(id)) {
+                throw new TransactionException("transaction msg add tryTime fail，transactionId is empty");
             }
-        }catch (Exception e){
-            logger.error("transaction table update fail,"+e.getMessage(),e);
+            try {
+                int rc = transactionRepository.addTryTime(id);
+                if (rc == 0) {
+                    logger.error("transaction msg add tryTime fail");
+                    throw new TransactionException("transaction msg add tryTime fail");
+                }
+            } catch (Exception e) {
+                logger.error("transaction table update fail," + e.getMessage(), e);
+            }
         }
     }
 
@@ -100,11 +97,11 @@ public class TransactionRepositoryUtils {
      * @return
      */
     public static Transaction getById(String id){
-        if(!checkRepository()){
-            return null;
+        if(checkRepository()) {
+            TransactionRepository transactionRepository = FactoryBuilder.getSpringSingeltonBean(TransactionRepository.class);
+            return transactionRepository.getById(id);
         }
-        TransactionRepository transactionRepository = FactoryBuilder.getSpringSingeltonBean(TransactionRepository.class);
-        return transactionRepository.getById(id);
+        return null;
     }
 
     private static boolean checkRepository(){
@@ -121,10 +118,18 @@ public class TransactionRepositoryUtils {
      * @return
      */
     public static List<Transaction> getFailTranMsgList() {
-        if(!checkRepository()){
-            return null;
+        if(checkRepository()) {
+            TransactionRepository transactionRepository = FactoryBuilder.getSpringSingeltonBean(TransactionRepository.class);
+            return transactionRepository.getFailTranMsgList();
         }
-        TransactionRepository transactionRepository = FactoryBuilder.getSpringSingeltonBean(TransactionRepository.class);
-        return transactionRepository.getFailTranMsgList();
+        return null;
     }
+
+    public static void delete(String id){
+        if(checkRepository()) {
+            TransactionRepository transactionRepository = FactoryBuilder.getSpringSingeltonBean(TransactionRepository.class);
+            transactionRepository.delete(id);
+        }
+    }
+
 }

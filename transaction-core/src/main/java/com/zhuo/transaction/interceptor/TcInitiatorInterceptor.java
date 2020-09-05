@@ -3,6 +3,7 @@ package com.zhuo.transaction.interceptor;
 import com.zhuo.transaction.InvocationContext;
 import com.zhuo.transaction.Participant;
 import com.zhuo.transaction.TransactionManager;
+import com.zhuo.transaction.common.exception.TransactionException;
 import com.zhuo.transaction.common.utils.ReflectionUtils;
 import com.zhuo.transaction.context.TcInitiatorContext;
 import com.zhuo.transaction.context.TcServiceContext;
@@ -26,21 +27,26 @@ public class TcInitiatorInterceptor {
     }
 
     public Object interceptCompensableMethod(ProceedingJoinPoint pjp, AbstractTransactionProducer transactionProducer) throws Throwable {
+        if(tc == null){
+           throw new TransactionException("transactionManager is empty");
+        }
+        tc.clear();
+        //构造TcServiceContext
         TcServiceContext tcServiceContext = new TcServiceContext(pjp);
         Method method = tcServiceContext.getMethod();
         Class targetClass = ReflectionUtils.getDeclaringType(pjp.getTarget().getClass(), method.getName(), method.getParameterTypes());
-
         InvocationContext paramInfoInvocation = new InvocationContext(targetClass,method.getDeclaringClass(),
                 tcServiceContext.getTcInitiator().paramMethod(),
                 method.getParameterTypes(), pjp.getArgs());
         Participant participant  = new Participant(paramInfoInvocation);
         participant.buildParamInfo(tcServiceContext);
         this.tc.setTcServiceContext(tcServiceContext);
-        transactionProducer.sendTcMsg(tc,tc.getTransaction());
-
+        //构造TcInitiatorContext
         TcInitiatorContext tcInitiatorContext = new TcInitiatorContext();
         tcInitiatorContext.buildParamContent(tcServiceContext.getMethod(),tcServiceContext.getPjp());
         this.tc.setTcInitiatorContext(tcInitiatorContext);
+        //发送消息
+        transactionProducer.sendTcMsg(tc,tc.getTransaction());
         return null;
     }
 }

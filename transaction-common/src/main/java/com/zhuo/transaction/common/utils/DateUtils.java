@@ -49,7 +49,7 @@ public class DateUtils {
         Date nowdate = new Date(System.currentTimeMillis());
         Calendar cal = Calendar.getInstance();
         cal.setTime(nowdate);
-        cal.add(Calendar.HOUR,Calendar.HOUR-hour);
+        cal.add(Calendar.HOUR_OF_DAY, -1*hour);
         return cal.getTime();
     }
 
@@ -60,5 +60,11 @@ public class DateUtils {
      */
     public static String formatYYYYMMDDHHMMSS(Date date){
         return threadLocalYmdHms.get().format(date);
+    }
+
+    public static void main(String[] args){
+        System.out.println(formatYYYYMMDDHHMMSS(new Date(System.currentTimeMillis())));
+        System.out.println(formatYYYYMMDDHHMMSS(getPreHourDate(1)));
+        System.out.println(formatYYYYMMDDHHMMSS(getNextHourDate(1)));
     }
 }

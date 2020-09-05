@@ -66,8 +66,8 @@ public class ConsumerMessageListener implements MessageListenerConcurrently {
                 continue;
             } catch (Exception e) {
                 logger.error(e.getMessage(),e);
-                TransactionRepositoryUtils.updateStatus(transactionId, TransactionMsgStatusEnum.code_3.getCode());
                 if(msg.getReconsumeTimes() == Contants.CONSUMER_RECONSUMETIMES){
+                    TransactionRepositoryUtils.updateStatus(transactionId, TransactionMsgStatusEnum.code_3.getCode());
                     return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
                 }
                 return ConsumeConcurrentlyStatus.RECONSUME_LATER;

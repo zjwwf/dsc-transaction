@@ -1,22 +1,26 @@
 package com.zhuo.transaction.spring.job;
 
-import com.zhuo.transaction.MqMsg;
 import com.zhuo.transaction.Transaction;
-import com.zhuo.transaction.common.utils.ObjectMapperUtils;
+import com.zhuo.transaction.TransactionRepository;
 import com.zhuo.transaction.support.FactoryBuilder;
 import com.zhuo.transaction.utils.TransactionRepositoryUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Method;
 import java.util.List;
 
 /**
- * describe:
+ * describe: 执行事务失败的补偿方法定时任务
  *
  * @author zhuojing
  * @date 2020/09/02
  */
 public class TransactionMsgJob {
 
+    private static Logger logger = LoggerFactory.getLogger(TransactionMsgJob.class);
+    private Integer bactchSize;
     public void execute(){
         try {
             List<Transaction> list = TransactionRepositoryUtils.getFailTranMsgList();
@@ -34,22 +38,44 @@ public class TransactionMsgJob {
                     //尝试从spring中获取类实例
                     Object target = FactoryBuilder.factoryOf(clazz, clazz).getInstance();
                     Method[] methods = target.getClass().getMethods();
-                    for(Method method : methods){
-                        if(method.getName().equals(methodName)){
-                            if(cancalMethodParam == null || cancalMethodParam.length == 0){
-                                method.invoke(target);
-                            }else{
-                                method.invoke(target,cancalMethodParam);
+                    try {
+                        for(Method method : methods){
+                            if(method.getName().equals(methodName)){
+                                if(cancalMethodParam == null || cancalMethodParam.length == 0){
+                                    method.invoke(target);
+                                }else{
+                                    method.invoke(target,cancalMethodParam);
+                                }
+                                break;
                             }
-                            break;
                         }
+                        TransactionRepositoryUtils.delete(transaction.getId());
+                    }catch (Exception e){
+                        logger.error("cancalMethod execute fail,id: {}",transaction.getId(),e);
+                        TransactionRepositoryUtils.addTryTime(transaction.getId());
+                        continue;
                     }
                 }
             }
             System.out.println("TransactionMsgJob run...");
         }catch (Exception e){
-
+            logger.error("cancalMethod execute fail",e);
         }
+    }
 
+    public static Logger getLogger() {
+        return logger;
+    }
+
+    public static void setLogger(Logger logger) {
+        TransactionMsgJob.logger = logger;
+    }
+
+    public Integer getBactchSize() {
+        return bactchSize;
+    }
+
+    public void setBactchSize(Integer bactchSize) {
+        this.bactchSize = bactchSize;
     }
 }

@@ -57,7 +57,7 @@ public class RocketMqAbstractTransactionProducer extends AbstractTransactionProd
         ZookeeperUtils.cacheParticipantService();
         transactionListener = new TransactionListenerImpl();
         List<String> children = ZookeeperUtils.getChildren(Contants.BASE_ZOOKEEPER_SERVICE_DIR.substring(0, Contants.BASE_ZOOKEEPER_SERVICE_DIR.length() - 1));
-        String groupId = children.stream().map(s -> super.GROUP_ID + "_" + s).collect(Collectors.joining("|"));
+//        String groupId = children.stream().map(s -> super.GROUP_ID + "_" + s).collect(Collectors.joining("|"));
         producer = new TransactionMQProducer(super.GROUP_ID);
         producer.setSendMsgTimeout(super.sendMsgTime);
         producer.setNamesrvAddr(namesrvAddr);

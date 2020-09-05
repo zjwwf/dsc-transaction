@@ -56,4 +56,13 @@ public class TransactionManager {
     public void setTcInitiatorContext(TcInitiatorContext tcInitiatorContext) {
         this.tcInitiatorContext = tcInitiatorContext;
     }
+
+    public void clear(){
+        if(this.tcServiceContext != null){
+            this.tcServiceContext = null;
+        }
+        if(this.tcInitiatorContext != null) {
+            this.tcInitiatorContext = null;
+        }
+    }
 }
