@@ -40,4 +40,9 @@ public class RedisTransactionRepository extends AbstractCachableTransactionRepos
     protected List<Transaction> doGetFailTranMsgList() {
         return null;
     }
+
+    @Override
+    public void init() {
+
+    }
 }

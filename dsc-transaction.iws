@@ -5,22 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4f814132-fc32-4d16-b7ad-eac886cfeab8" name="Default Changelist" comment="gitigore提交">
-      <change afterPath="$PROJECT_DIR$/transaction-core/src/main/java/com/zhuo/transaction/repository/RedisTransactionRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dsc-transaction.ipr" beforeDir="false" afterPath="$PROJECT_DIR$/dsc-transaction.ipr" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/doc/1.0.0-使用文档.doc" beforeDir="false" afterPath="$PROJECT_DIR$/doc/1.0.0-使用文档.doc" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dsc-transaction.iws" beforeDir="false" afterPath="$PROJECT_DIR$/dsc-transaction.iws" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/transaction-common/src/main/java/com/zhuo/transaction/common/utils/DateUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/transaction-common/src/main/java/com/zhuo/transaction/common/utils/DateUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/transaction-core/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/transaction-core/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/transaction-core/src/main/java/com/zhuo/transaction/TransactionManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/transaction-core/src/main/java/com/zhuo/transaction/TransactionManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/transaction-core/src/main/java/com/zhuo/transaction/interceptor/TcInitiatorInterceptor.java" beforeDir="false" afterPath="$PROJECT_DIR$/transaction-core/src/main/java/com/zhuo/transaction/interceptor/TcInitiatorInterceptor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/transaction-core/src/main/java/com/zhuo/transaction/jms/rocketmq/ConsumerMessageListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/transaction-core/src/main/java/com/zhuo/transaction/jms/rocketmq/ConsumerMessageListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/transaction-core/src/main/java/com/zhuo/transaction/jms/rocketmq/RocketMqAbstractTransactionProducer.java" beforeDir="false" afterPath="$PROJECT_DIR$/transaction-core/src/main/java/com/zhuo/transaction/jms/rocketmq/RocketMqAbstractTransactionProducer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/transaction-core/src/main/java/com/zhuo/transaction/TransactionRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/transaction-core/src/main/java/com/zhuo/transaction/TransactionRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/transaction-core/src/main/java/com/zhuo/transaction/repository/JdbcTransactionRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/transaction-core/src/main/java/com/zhuo/transaction/repository/JdbcTransactionRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/transaction-core/src/main/java/com/zhuo/transaction/utils/TransactionRepositoryUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/transaction-core/src/main/java/com/zhuo/transaction/utils/TransactionRepositoryUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/transaction-core/transaction-core.iml" beforeDir="false" afterPath="$PROJECT_DIR$/transaction-core/transaction-core.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/transaction-spring/src/main/java/com/zhuo/transaction/spring/job/TransactionMsgJob.java" beforeDir="false" afterPath="$PROJECT_DIR$/transaction-spring/src/main/java/com/zhuo/transaction/spring/job/TransactionMsgJob.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/transaction-spring/src/main/java/com/zhuo/transaction/spring/job/TransactionMsgJobConfigure.java" beforeDir="false" afterPath="$PROJECT_DIR$/transaction-spring/src/main/java/com/zhuo/transaction/spring/job/TransactionMsgJobConfigure.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/transaction-spring/transaction-spring.iml" beforeDir="false" afterPath="$PROJECT_DIR$/transaction-spring/transaction-spring.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/transaction-core/src/main/java/com/zhuo/transaction/repository/RedisTransactionRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/transaction-core/src/main/java/com/zhuo/transaction/repository/RedisTransactionRepository.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -39,18 +28,10 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/transaction-spring/src/main/java/com/zhuo/transaction/spring/job/TransactionMsgJob.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="461">
+            <state relative-caret-position="665">
               <caret line="44" column="56" selection-start-line="44" selection-start-column="50" selection-end-line="44" selection-end-column="56" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#2696#2697#0" expanded="true" />
-                <element signature="e#2725#2726#0" expanded="true" />
-                <element signature="e#2776#2777#0" expanded="true" />
-                <element signature="e#2825#2826#0" expanded="true" />
-                <element signature="e#2863#2864#0" expanded="true" />
-                <element signature="e#2896#2897#0" expanded="true" />
-                <element signature="e#2949#2950#0" expanded="true" />
-                <element signature="e#2993#2994#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -59,7 +40,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/transaction-core/src/main/java/com/zhuo/transaction/jms/rocketmq/ConsumerMessageListener.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="387">
+            <state relative-caret-position="874">
               <caret line="68" column="24" selection-start-line="68" selection-start-column="24" selection-end-line="68" selection-end-column="24" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -71,7 +52,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/pom.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="458">
+            <state relative-caret-position="2831">
               <caret line="149" column="25" selection-start-line="145" selection-start-column="12" selection-end-line="149" selection-end-column="25" />
             </state>
           </provider>
@@ -80,8 +61,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/transaction-core/pom.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="477">
-              <caret line="66" column="21" lean-forward="true" selection-start-line="66" selection-start-column="21" selection-end-line="66" selection-end-column="21" />
+            <state relative-caret-position="1254">
+              <caret line="66" column="21" selection-start-line="66" selection-start-column="21" selection-end-line="66" selection-end-column="21" />
             </state>
           </provider>
         </entry>
@@ -89,8 +70,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/transaction-core/src/main/java/com/zhuo/transaction/repository/RedisTransactionRepository.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="342">
-              <caret line="18" column="13" lean-forward="true" selection-start-line="18" selection-start-column="13" selection-end-line="18" selection-end-column="13" />
+            <state relative-caret-position="233">
+              <caret line="38" column="13" selection-start-line="38" selection-start-column="13" selection-end-line="38" selection-end-column="13" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#325#326#0" expanded="true" />
@@ -113,8 +94,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/transaction-core/src/main/java/com/zhuo/transaction/TransactionRepository.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="387">
-              <caret line="53" column="22" selection-start-line="53" selection-start-column="22" selection-end-line="53" selection-end-column="22" />
+            <state relative-caret-position="285">
+              <caret line="15" column="12" selection-start-line="15" selection-start-column="12" selection-end-line="15" selection-end-column="12" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -125,8 +106,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/transaction-core/src/main/java/com/zhuo/transaction/repository/AbstractCachableTransactionRepositor.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="458">
-              <caret line="83" column="41" selection-start-line="83" selection-start-column="41" selection-end-line="83" selection-end-column="41" />
+            <state relative-caret-position="171">
+              <caret line="15" column="76" selection-start-line="15" selection-start-column="76" selection-end-line="15" selection-end-column="76" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#1649#1650#0" expanded="true" />
@@ -139,12 +120,10 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/transaction-core/src/main/java/com/zhuo/transaction/jms/rocketmq/RocketMqAbstractTransactionProducer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="406">
+            <state relative-caret-position="665">
               <caret line="60" column="34" selection-start-line="60" selection-start-column="34" selection-end-line="60" selection-end-column="34" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#5626#5627#0" expanded="true" />
-                <element signature="e#5666#5667#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -153,12 +132,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="jar://$MAVEN_REPOSITORY$/org/apache/rocketmq/rocketmq-client/4.6.0/rocketmq-client-4.6.0.jar!/org/apache/rocketmq/client/producer/TransactionMQProducer.class">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1104">
+            <state relative-caret-position="418">
               <caret line="31" column="32" selection-start-line="31" selection-start-column="11" selection-end-line="31" selection-end-column="32" />
-              <folding>
-                <element signature="e#979#980#0" expanded="true" />
-                <element signature="e#1043#1044#0" expanded="true" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -166,8 +141,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/transaction-core/src/main/java/com/zhuo/transaction/repository/JdbcTransactionRepository.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="266">
-              <caret line="26" column="47" selection-start-line="26" selection-start-column="32" selection-end-line="26" selection-end-column="47" />
+            <state relative-caret-position="366">
+              <caret line="67" column="9" selection-start-line="67" selection-start-column="9" selection-end-line="67" selection-end-column="9" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -254,7 +229,6 @@
         <option value="$PROJECT_DIR$/transaction-core/src/test/java/com/zhuo/transaction/test/ZookeeperTest1.java" />
         <option value="$PROJECT_DIR$/transaction-spring/pom.xml" />
         <option value="$PROJECT_DIR$/transaction-core/src/main/java/com/zhuo/transaction/Transaction.java" />
-        <option value="$PROJECT_DIR$/transaction-core/src/main/java/com/zhuo/transaction/TransactionRepository.java" />
         <option value="$PROJECT_DIR$/transaction-core/src/main/java/com/zhuo/transaction/repository/AbstractCachableTransactionRepositor.java" />
         <option value="$PROJECT_DIR$/transaction-common/src/main/java/com/zhuo/transaction/common/utils/DateUtils.java" />
         <option value="$PROJECT_DIR$/transaction-core/src/main/java/com/zhuo/transaction/interceptor/TcInitiatorInterceptor.java" />
@@ -262,12 +236,13 @@
         <option value="$PROJECT_DIR$/transaction-core/src/main/java/com/zhuo/transaction/utils/TransactionRepositoryUtils.java" />
         <option value="$PROJECT_DIR$/transaction-spring/src/main/java/com/zhuo/transaction/spring/job/TransactionMsgJobConfigure.java" />
         <option value="$PROJECT_DIR$/transaction-spring/src/main/java/com/zhuo/transaction/spring/job/TransactionMsgJob.java" />
-        <option value="$PROJECT_DIR$/transaction-core/src/main/java/com/zhuo/transaction/repository/JdbcTransactionRepository.java" />
         <option value="$PROJECT_DIR$/transaction-core/src/main/java/com/zhuo/transaction/jms/rocketmq/RocketMqAbstractTransactionProducer.java" />
         <option value="$PROJECT_DIR$/transaction-core/src/main/java/com/zhuo/transaction/jms/rocketmq/ConsumerMessageListener.java" />
         <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/transaction-core/pom.xml" />
+        <option value="$PROJECT_DIR$/transaction-core/src/main/java/com/zhuo/transaction/TransactionRepository.java" />
         <option value="$PROJECT_DIR$/transaction-core/src/main/java/com/zhuo/transaction/repository/RedisTransactionRepository.java" />
+        <option value="$PROJECT_DIR$/transaction-core/src/main/java/com/zhuo/transaction/repository/JdbcTransactionRepository.java" />
       </list>
     </option>
   </component>
@@ -315,12 +290,19 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
+      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
             <path>
               <item name="dsc-transaction" type="b2602c69:ProjectViewProjectNode" />
               <item name="dsc-transaction" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="dsc-transaction" type="b2602c69:ProjectViewProjectNode" />
+              <item name="dsc-transaction" type="462c0819:PsiDirectoryNode" />
+              <item name="doc" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="dsc-transaction" type="b2602c69:ProjectViewProjectNode" />
@@ -371,14 +353,12 @@
           <select />
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1599296785450" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1599487973477" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="project.structure.last.edited" value="Modules" />
@@ -507,6 +487,7 @@
       <workItem from="1599147983536" duration="3029000" />
       <workItem from="1599184968680" duration="6501000" />
       <workItem from="1599273104842" duration="5832000" />
+      <workItem from="1599486168966" duration="1671000" />
     </task>
     <task id="LOCAL-00001" summary="gitigore提交">
       <created>1598458785593</created>
@@ -526,13 +507,13 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="154269000" />
+    <option name="totallyTimeSpent" value="155940000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.32662642" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.22334003" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Designer" order="2" />
       <window_info id="Image Layers" order="3" />
@@ -559,7 +540,7 @@
       <window_info anchor="bottom" id="Spring" order="16" />
       <window_info anchor="bottom" id="Java Enterprise" order="17" />
       <window_info anchor="bottom" id="JProfiler" order="18" />
-      <window_info anchor="bottom" id="Messages" order="19" />
+      <window_info anchor="bottom" id="Messages" order="19" weight="0.32991204" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -1007,72 +988,19 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/transaction-core/src/main/java/com/zhuo/transaction/TransactionRepository.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="387">
-          <caret line="53" column="22" selection-start-line="53" selection-start-column="22" selection-end-line="53" selection-end-column="22" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/transaction-core/src/main/java/com/zhuo/transaction/repository/AbstractCachableTransactionRepositor.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="458">
-          <caret line="83" column="41" selection-start-line="83" selection-start-column="41" selection-end-line="83" selection-end-column="41" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#1649#1650#0" expanded="true" />
-            <element signature="e#1694#1695#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/transaction-spring/src/main/java/com/zhuo/transaction/spring/job/TransactionMsgJob.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="461">
+        <state relative-caret-position="665">
           <caret line="44" column="56" selection-start-line="44" selection-start-column="50" selection-end-line="44" selection-end-column="56" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#2696#2697#0" expanded="true" />
-            <element signature="e#2725#2726#0" expanded="true" />
-            <element signature="e#2776#2777#0" expanded="true" />
-            <element signature="e#2825#2826#0" expanded="true" />
-            <element signature="e#2863#2864#0" expanded="true" />
-            <element signature="e#2896#2897#0" expanded="true" />
-            <element signature="e#2949#2950#0" expanded="true" />
-            <element signature="e#2993#2994#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/transaction-core/src/main/java/com/zhuo/transaction/jms/rocketmq/RocketMqAbstractTransactionProducer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="406">
-          <caret line="60" column="34" selection-start-line="60" selection-start-column="34" selection-end-line="60" selection-end-column="34" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#5626#5627#0" expanded="true" />
-            <element signature="e#5666#5667#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/apache/rocketmq/rocketmq-client/4.6.0/rocketmq-client-4.6.0.jar!/org/apache/rocketmq/client/producer/TransactionMQProducer.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1104">
-          <caret line="31" column="32" selection-start-line="31" selection-start-column="11" selection-end-line="31" selection-end-column="32" />
-          <folding>
-            <element signature="e#979#980#0" expanded="true" />
-            <element signature="e#1043#1044#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/transaction-core/src/main/java/com/zhuo/transaction/jms/rocketmq/ConsumerMessageListener.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="387">
+        <state relative-caret-position="874">
           <caret line="68" column="24" selection-start-line="68" selection-start-column="24" selection-end-line="68" selection-end-column="24" />
           <folding>
             <element signature="imports" expanded="true" />
@@ -1082,22 +1010,61 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/pom.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="458">
+        <state relative-caret-position="2831">
           <caret line="149" column="25" selection-start-line="145" selection-start-column="12" selection-end-line="149" selection-end-column="25" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/transaction-core/pom.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="477">
-          <caret line="66" column="21" lean-forward="true" selection-start-line="66" selection-start-column="21" selection-end-line="66" selection-end-column="21" />
+        <state relative-caret-position="1254">
+          <caret line="66" column="21" selection-start-line="66" selection-start-column="21" selection-end-line="66" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/transaction-core/src/main/java/com/zhuo/transaction/jms/rocketmq/RocketMqAbstractTransactionProducer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="665">
+          <caret line="60" column="34" selection-start-line="60" selection-start-column="34" selection-end-line="60" selection-end-column="34" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/apache/rocketmq/rocketmq-client/4.6.0/rocketmq-client-4.6.0.jar!/org/apache/rocketmq/client/producer/TransactionMQProducer.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="418">
+          <caret line="31" column="32" selection-start-line="31" selection-start-column="11" selection-end-line="31" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/transaction-core/src/main/java/com/zhuo/transaction/repository/AbstractCachableTransactionRepositor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="171">
+          <caret line="15" column="76" selection-start-line="15" selection-start-column="76" selection-end-line="15" selection-end-column="76" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#1649#1650#0" expanded="true" />
+            <element signature="e#1694#1695#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/transaction-core/src/main/java/com/zhuo/transaction/TransactionRepository.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="285">
+          <caret line="15" column="12" selection-start-line="15" selection-start-column="12" selection-end-line="15" selection-end-column="12" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/transaction-core/src/main/java/com/zhuo/transaction/repository/RedisTransactionRepository.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="342">
-          <caret line="18" column="13" lean-forward="true" selection-start-line="18" selection-start-column="13" selection-end-line="18" selection-end-column="13" />
+        <state relative-caret-position="233">
+          <caret line="38" column="13" selection-start-line="38" selection-start-column="13" selection-end-line="38" selection-end-column="13" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#325#326#0" expanded="true" />
@@ -1118,8 +1085,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/transaction-core/src/main/java/com/zhuo/transaction/repository/JdbcTransactionRepository.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="266">
-          <caret line="26" column="47" selection-start-line="26" selection-start-column="32" selection-end-line="26" selection-end-column="47" />
+        <state relative-caret-position="366">
+          <caret line="67" column="9" selection-start-line="67" selection-start-column="9" selection-end-line="67" selection-end-column="9" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

@@ -13,6 +13,10 @@ import java.util.List;
 public interface TransactionRepository {
 
     /**
+     * 初始化方法
+     */
+    void init();
+    /**
      * 新增
      * @param transaction
      * @return

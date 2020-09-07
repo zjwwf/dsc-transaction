@@ -37,6 +37,37 @@ public class JdbcTransactionRepository extends AbstractCachableTransactionReposi
     }
 
     @Override
+    public void init() {
+        String createTableSql = "Create Table If Not Exists `dsc_transaction` (\n" +
+                "  `id` varchar(100) NOT NULL,\n" +
+                "  `body` text,\n" +
+                "  `try_time` int(2) DEFAULT '0' COMMENT '重试次数',\n" +
+                "  `status` tinyint(2) DEFAULT NULL COMMENT '1：未结束，2：已结束，3：出现异常',\n" +
+                "  `cancal_method` varchar(255) DEFAULT NULL,\n" +
+                "  `cancal_method_param` blob,\n" +
+                "  `confirm_method` varchar(255) DEFAULT NULL,\n" +
+                "  `confirm_method_param` blob,\n" +
+                "  `transaction_type` int(11) DEFAULT NULL,\n" +
+                "  `create_time` datetime DEFAULT NULL,\n" +
+                "  `update_time` datetime DEFAULT NULL,\n" +
+                "  PRIMARY KEY (`id`),\n" +
+                "  KEY `index_status_update_time` (`status`,`update_time`)\n" +
+                ") ENGINE=InnoDB DEFAULT CHARSET=utf8;\n";
+        Connection  connection = null;
+        PreparedStatement stmt = null;
+        try {
+            connection = getConnection();
+            stmt = connection.prepareStatement(createTableSql);
+            stmt.execute();
+        }catch (Exception e){
+            logger.error(e.getMessage(),e);
+            throw new TransactionException("create transaction msg table fail");
+        }finally {
+            closeStatement(stmt);
+            releaseConnection(connection);
+        }
+    }
+    @Override
     protected int doCreate(Transaction transaction) {
         String sql = "INSERT INTO dsc_transaction(id,body,try_time,`status`,cancal_method,cancal_method_param,confirm_method,confirm_method_param,transaction_type,create_time,update_time) VALUES(?,?,?,?,?,?,?,?,?,?,?)";
         Connection  connection = null;
@@ -237,4 +268,6 @@ public class JdbcTransactionRepository extends AbstractCachableTransactionReposi
     private String getColumns(){
         return "`id`,`body`,`try_time`,`status`,`cancal_method`,`cancal_method_param`,`confirm_method`,`confirm_method_param`,`transaction_type`,`create_time`,`update_time`";
     }
+
+
 }
