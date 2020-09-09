@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * describe:
+ * describe: 事务消息 数据库存储
  *
  * @author zhuojing
  * @date 2020/08/27
@@ -25,7 +25,7 @@ public class JdbcTransactionRepository extends AbstractCachableTransactionReposi
     private DataSource dataSource;
 
     private String tableName = "dsc_transaction";
-    private ObjectSerializer serializer = new KryoPoolSerializer();
+    private ObjectSerializer serializer = null;
 
     public JdbcTransactionRepository(DataSource dataSource){
         this.dataSource = dataSource;
@@ -38,6 +38,7 @@ public class JdbcTransactionRepository extends AbstractCachableTransactionReposi
 
     @Override
     public void init() {
+        serializer = new KryoPoolSerializer();
         String createTableSql = "Create Table If Not Exists `dsc_transaction` (\n" +
                 "  `id` varchar(100) NOT NULL,\n" +
                 "  `body` text,\n" +
@@ -68,7 +69,7 @@ public class JdbcTransactionRepository extends AbstractCachableTransactionReposi
         }
     }
     @Override
-    protected int doCreate(Transaction transaction) {
+    protected void doCreate(Transaction transaction) {
         String sql = "INSERT INTO dsc_transaction(id,body,try_time,`status`,cancal_method,cancal_method_param,confirm_method,confirm_method_param,transaction_type,create_time,update_time) VALUES(?,?,?,?,?,?,?,?,?,?,?)";
         Connection  connection = null;
         PreparedStatement stmt = null;
@@ -87,18 +88,17 @@ public class JdbcTransactionRepository extends AbstractCachableTransactionReposi
             stmt.setTimestamp(10,new java.sql.Timestamp(transaction.getCreateTime().getTime()));
             stmt.setTimestamp(11,new java.sql.Timestamp(transaction.getUpdateTime().getTime()));
             stmt.execute();
-            return 1;
         }catch (Exception e){
             logger.error(e.getMessage(),e);
+            throw new TransactionException("JdbcTransactionRepository create transaction error,"+e.getMessage());
         }finally {
             closeStatement(stmt);
             releaseConnection(connection);
         }
-        return 0;
     }
 
     @Override
-    protected int doUpdateStatus(String transactionId,int statusCode) {
+    protected void doUpdateStatus(String transactionId,int statusCode) {
         String sql = "UPDATE dsc_transaction SET `status` = ?,update_time=? WHERE id = ?";
         Connection  connection = null;
         PreparedStatement stmt = null;
@@ -108,18 +108,18 @@ public class JdbcTransactionRepository extends AbstractCachableTransactionReposi
             stmt.setInt(1,statusCode);
             stmt.setTimestamp(2,new java.sql.Timestamp(System.currentTimeMillis()));
             stmt.setString(3,transactionId);
-            return stmt.executeUpdate();
+            stmt.executeUpdate();
         }catch (Exception e){
             logger.error(e.getMessage(),e);
+            throw new TransactionException("JdbcTransactionRepository doUpdateStatus error,"+e.getMessage());
         }finally {
             closeStatement(stmt);
             releaseConnection(connection);
         }
-        return 0;
     }
 
     @Override
-    protected int doDelete(String transactionId) {
+    protected void doDelete(String transactionId) {
         String sql = "DELETE FROM dsc_transaction WHERE id = ?";
         Connection  connection = null;
         PreparedStatement stmt = null;
@@ -127,18 +127,18 @@ public class JdbcTransactionRepository extends AbstractCachableTransactionReposi
             connection = getConnection();
             stmt = connection.prepareStatement(sql);
             stmt.setString(1,transactionId);
-            return stmt.executeUpdate();
+            stmt.executeUpdate();
         }catch (Exception e){
             logger.error(e.getMessage(),e);
+            throw new TransactionException("JdbcTransactionRepository doDelete error,"+e.getMessage());
         }finally {
             closeStatement(stmt);
             releaseConnection(connection);
         }
-        return 0;
     }
 
     @Override
-    protected int doAddTryTime(String transactionId) {
+    protected void doAddTryTime(String transactionId) {
         String sql = "UPDATE dsc_transaction SET try_time = try_time+1,update_time= ? WHERE id = ? ";
         Connection  connection = null;
         PreparedStatement stmt = null;
@@ -147,14 +147,14 @@ public class JdbcTransactionRepository extends AbstractCachableTransactionReposi
             stmt = connection.prepareStatement(sql);
             stmt.setTimestamp(1,new java.sql.Timestamp(System.currentTimeMillis()));
             stmt.setString(2,transactionId);
-            return stmt.executeUpdate();
+            stmt.executeUpdate();
         }catch (Exception e){
             logger.error(e.getMessage(),e);
+            throw new TransactionException("JdbcTransactionRepository doAddTryTime error,"+e.getMessage());
         }finally {
             closeStatement(stmt);
             releaseConnection(connection);
         }
-        return 0;
     }
 
     @Override
@@ -183,7 +183,7 @@ public class JdbcTransactionRepository extends AbstractCachableTransactionReposi
     @Override
     protected List<Transaction> doGetFailTranMsgList() {
         String sql = "SELECT "+getColumns()+" FROM dsc_transaction WHERE `status` = 3 AND update_time < ? " +
-                "and cancal_method is not null and  cancal_method != '' ORDER BY update_time  LIMIT 10";
+                "and cancal_method is not null and  cancal_method != '' ORDER BY update_time  LIMIT "+super.queryListNum;
         Connection  connection = null;
         PreparedStatement stmt = null;
         List<Transaction> result = new ArrayList<>();
@@ -265,9 +265,11 @@ public class JdbcTransactionRepository extends AbstractCachableTransactionReposi
         }
     }
 
+
     private String getColumns(){
         return "`id`,`body`,`try_time`,`status`,`cancal_method`,`cancal_method_param`,`confirm_method`,`confirm_method_param`,`transaction_type`,`create_time`,`update_time`";
     }
+
 
 
 }

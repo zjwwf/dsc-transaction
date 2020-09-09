@@ -2,6 +2,7 @@ package com.zhuo.transaction.repository;
 
 import com.zhuo.transaction.Transaction;
 import com.zhuo.transaction.TransactionRepository;
+import com.zhuo.transaction.common.exception.TransactionException;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Date;
@@ -15,10 +16,11 @@ import java.util.List;
  */
 public abstract class AbstractCachableTransactionRepositor implements TransactionRepository {
 
+    protected Integer queryListNum = 10;
     @Override
-    public int create(Transaction transaction) {
+    public void create(Transaction transaction) {
         if(transaction == null){
-            return 0;
+            throw new TransactionException("TransactionRepository create transaction is empty");
         }
         if(transaction.getCreateTime() == null){
             transaction.setCreateTime(new Date());
@@ -26,31 +28,31 @@ public abstract class AbstractCachableTransactionRepositor implements Transactio
         if(transaction.getUpdateTime() == null){
             transaction.setUpdateTime(new Date());
         }
-        return doCreate(transaction);
+        doCreate(transaction);
     }
 
     @Override
-    public int updateStatus(String transactionId,int statusCode){
+    public void updateStatus(String transactionId,int statusCode){
         if(StringUtils.isBlank(transactionId)){
-            return 0;
+            throw new TransactionException("TransactionRepository updateStatus transactionId is empty");
         }
-        return doUpdateStatus(transactionId,statusCode);
+        doUpdateStatus(transactionId,statusCode);
     }
 
     @Override
-    public int delete(String transactionId) {
+    public void delete(String transactionId) {
         if(StringUtils.isBlank(transactionId)){
-            return 0;
+            throw new TransactionException("TransactionRepository delete transactionId is empty");
         }
-        return doDelete(transactionId);
+        doDelete(transactionId);
     }
 
     @Override
-    public int addTryTime(String transactionId) {
+    public void addTryTime(String transactionId) {
         if(StringUtils.isBlank(transactionId)){
-            return 0;
+            throw new TransactionException("TransactionRepository updateStatus addTryTime is empty");
         }
-        return doAddTryTime(transactionId);
+        doAddTryTime(transactionId);
     }
 
     @Override
@@ -71,16 +73,20 @@ public abstract class AbstractCachableTransactionRepositor implements Transactio
         return null;
     }
 
-    protected abstract int doCreate(Transaction transaction);
+    protected abstract void doCreate(Transaction transaction);
 
-    protected abstract int doUpdateStatus(String transactionId,int statusCode);
+    protected abstract void doUpdateStatus(String transactionId,int statusCode);
 
-    protected abstract int doDelete(String transactionId);
+    protected abstract void doDelete(String transactionId);
 
-    protected abstract int doAddTryTime(String transactionId);
+    protected abstract void doAddTryTime(String transactionId);
 
     protected abstract Transaction doGetById(String transactionId);
 
     protected abstract List<Transaction> doGetFailTranMsgList();
+
+    public void setQueryListNum(Integer queryListNum){
+        this.queryListNum = queryListNum;
+    }
 
 }

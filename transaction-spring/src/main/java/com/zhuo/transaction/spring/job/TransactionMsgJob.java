@@ -2,6 +2,7 @@ package com.zhuo.transaction.spring.job;
 
 import com.zhuo.transaction.Transaction;
 import com.zhuo.transaction.TransactionRepository;
+import com.zhuo.transaction.common.commonEnum.TransactionMsgStatusEnum;
 import com.zhuo.transaction.support.FactoryBuilder;
 import com.zhuo.transaction.utils.TransactionRepositoryUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -26,6 +27,10 @@ public class TransactionMsgJob {
             List<Transaction> list = TransactionRepositoryUtils.getFailTranMsgList();
             if(list != null && list.size() > 0){
                 for(Transaction transaction : list){
+                    //判断最新的更新时间在一个小时之前(redis存储时候需要加这个判断)
+                    if(transaction.getUpdateTime() != null && System.currentTimeMillis() - transaction.getUpdateTime().getTime() < 1000*60*60){
+                        continue;
+                    }
                     //获取取消方法名
                     String cancalMethod = transaction.getCancalMethod();
                     //获取参数
@@ -49,7 +54,7 @@ public class TransactionMsgJob {
                                 break;
                             }
                         }
-                        TransactionRepositoryUtils.delete(transaction.getId());
+                        TransactionRepositoryUtils.updateStatus(transaction.getId(), TransactionMsgStatusEnum.code_2.getCode());
                     }catch (Exception e){
                         logger.error("cancalMethod execute fail,id: {}",transaction.getId(),e);
                         TransactionRepositoryUtils.addTryTime(transaction.getId());

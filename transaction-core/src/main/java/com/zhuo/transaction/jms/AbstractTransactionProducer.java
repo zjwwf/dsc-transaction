@@ -1,7 +1,6 @@
 package com.zhuo.transaction.jms;
 
 import com.zhuo.transaction.Transaction;
-import com.zhuo.transaction.TransactionManager;
 import com.zhuo.transaction.context.TcServiceContext;
 
 /**
@@ -21,6 +20,6 @@ public abstract class AbstractTransactionProducer {
      * @param tc
      * @param transaction
      */
-    public abstract void sendTcMsg(TransactionManager tc, Transaction transaction);
+    public abstract void sendTcMsg(TcServiceContext tcServiceContext, Transaction transaction);
 
 }

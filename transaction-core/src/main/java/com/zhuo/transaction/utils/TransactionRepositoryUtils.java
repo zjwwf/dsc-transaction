@@ -31,11 +31,7 @@ public class TransactionRepositoryUtils {
                 throw new TransactionException("create transaction table fail，transaction is empty");
             }
             TransactionRepository transactionRepository = FactoryBuilder.getSpringSingeltonBean(TransactionRepository.class);
-            int rc = transactionRepository.create(tc);
-            if (rc == 0) {
-                logger.error("create transaction table fail");
-                throw new TransactionException("create transaction table fail");
-            }
+            transactionRepository.create(tc);
         }
     }
     /**
@@ -50,21 +46,7 @@ public class TransactionRepositoryUtils {
                 logger.error("update transaction table fail，transactionId is empty");
                 throw new TransactionException("update transaction table fail，transactionId is empty");
             }
-            Transaction oldtc = transactionRepository.getById(id);
-            try {
-                if (oldtc == null) {
-                    logger.error("update transaction msg is empty");
-                    throw new TransactionException("update transaction msg is empty");
-                } else {
-                    int rc = transactionRepository.updateStatus(id, statusCode);
-                    if (rc == 0) {
-                        logger.error("update transaction table fail");
-                        throw new TransactionException("update transaction table fail");
-                    }
-                }
-            } catch (Exception e) {
-                logger.error("transaction table update fail," + e.getMessage(), e);
-            }
+            transactionRepository.updateStatus(id, statusCode);
         }
 
     }
@@ -80,13 +62,10 @@ public class TransactionRepositoryUtils {
                 throw new TransactionException("transaction msg add tryTime fail，transactionId is empty");
             }
             try {
-                int rc = transactionRepository.addTryTime(id);
-                if (rc == 0) {
-                    logger.error("transaction msg add tryTime fail");
-                    throw new TransactionException("transaction msg add tryTime fail");
-                }
+                transactionRepository.addTryTime(id);
             } catch (Exception e) {
-                logger.error("transaction table update fail," + e.getMessage(), e);
+                logger.error("transaction table tryTime fail," + e.getMessage(), e);
+                throw new TransactionException("transaction msg add tryTime fail");
             }
         }
     }

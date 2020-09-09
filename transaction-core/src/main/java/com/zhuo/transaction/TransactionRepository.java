@@ -19,30 +19,27 @@ public interface TransactionRepository {
     /**
      * 新增
      * @param transaction
-     * @return
      */
-    int create(Transaction transaction);
+    void create(Transaction transaction);
 
     /**
      *  更新事务状态
      * @param transactionId
      * @param statusCode
-     * @return
      */
-    int updateStatus(String transactionId,int statusCode);
+    void updateStatus(String transactionId,int statusCode);
 
     /**
      * 删除
      * @param transactionId
-     * @return
      */
-    int delete(String transactionId);
+    void delete(String transactionId);
 
     /**
      * 添加重试次数
      * @param transactionId
      */
-    int addTryTime(String transactionId);
+    void addTryTime(String transactionId);
 
     /**
      * 根据id查找

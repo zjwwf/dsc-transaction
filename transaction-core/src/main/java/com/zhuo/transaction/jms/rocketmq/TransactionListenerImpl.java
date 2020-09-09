@@ -1,5 +1,6 @@
 package com.zhuo.transaction.jms.rocketmq;
 
+import com.zhuo.transaction.Transaction;
 import com.zhuo.transaction.cache.ProducerExecuteCache;
 import com.zhuo.transaction.common.commonEnum.TransactionMsgStatusEnum;
 import com.zhuo.transaction.context.TcServiceContext;
@@ -23,44 +24,24 @@ public class TransactionListenerImpl implements TransactionListener {
 
     @Override
     public LocalTransactionState executeLocalTransaction(Message msg, Object arg) {
-        TcServiceContext serviceContext = (TcServiceContext) arg;
+        Transaction transaction = (Transaction) arg;
         try {
-            if(ProducerExecuteCache.get(serviceContext.getTransactionId()) == null) {
-                serviceContext.proceed();
-                System.out.println("send success,msg:" + new String(msg.getBody()));
-                ProducerExecuteCache.put(serviceContext.getTransactionId(),serviceContext.getTransactionId());
-            }
-            TransactionRepositoryUtils.updateStatus(serviceContext.getTransactionId(), TransactionMsgStatusEnum.code_2.getCode());
+            TransactionRepositoryUtils.updateStatus(transaction.getId(), TransactionMsgStatusEnum.code_2.getCode());
             return LocalTransactionState.COMMIT_MESSAGE;
         }catch (Exception e){
             logger.error(e.getMessage(),e);
-            TransactionRepositoryUtils.updateStatus(serviceContext.getTransactionId(), TransactionMsgStatusEnum.code_3.getCode());
+            TransactionRepositoryUtils.updateStatus(transaction.getId(), TransactionMsgStatusEnum.code_3.getCode());
             return LocalTransactionState.ROLLBACK_MESSAGE;
         }
     }
 
     /**
-     * 对于LocalTransactionState.UNKNOW 的重新检查,todo
+     * rocketmq 本地事务出现异常，删除mq消息
      * @param msg
      * @return
      */
     @Override
     public LocalTransactionState checkLocalTransaction(MessageExt msg) {
-        //根据 msg.getTransactionId() 查询消息表，判断是否执行成功
-//        Integer status = localTrans.get(msg.getTransactionId());
-//        System.out.println("checkLocalTransaction"+msg.getTransactionId()+"-->"+status);
-//        if (null != status) {
-//            switch (status) {
-//                case 0:
-//                    return LocalTransactionState.UNKNOW;
-//                case 1:
-//                    return LocalTransactionState.COMMIT_MESSAGE;
-//                case 2:
-//                    return LocalTransactionState.ROLLBACK_MESSAGE;
-//                 default:
-//                    break;
-//            }
-//        }
         return LocalTransactionState.ROLLBACK_MESSAGE;
     }
 }
