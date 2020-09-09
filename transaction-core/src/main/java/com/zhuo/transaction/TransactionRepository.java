@@ -1,7 +1,5 @@
 package com.zhuo.transaction;
 
-import com.zhuo.transaction.Transaction;
-
 import java.util.List;
 
 /**
