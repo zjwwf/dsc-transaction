@@ -73,6 +73,14 @@ public abstract class AbstractCachableTransactionRepositor implements Transactio
         return null;
     }
 
+    @Override
+    public boolean exist(String transactionId) {
+        if(StringUtils.isNotBlank(transactionId)){
+            return doexist(transactionId);
+        }
+        return false;
+    }
+
     protected abstract void doCreate(Transaction transaction);
 
     protected abstract void doUpdateStatus(String transactionId,int statusCode);
@@ -84,6 +92,8 @@ public abstract class AbstractCachableTransactionRepositor implements Transactio
     protected abstract Transaction doGetById(String transactionId);
 
     protected abstract List<Transaction> doGetFailTranMsgList();
+
+    protected abstract boolean doexist(String transactionId);
 
     public void setQueryListNum(Integer queryListNum){
         this.queryListNum = queryListNum;

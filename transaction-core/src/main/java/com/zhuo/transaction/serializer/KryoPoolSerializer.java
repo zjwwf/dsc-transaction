@@ -55,6 +55,9 @@ public class KryoPoolSerializer implements ObjectSerializer<Object> {
     @Override
     public byte[] serialize(final Object object) {
 
+        if(object == null) {
+            return null;
+        }
         return pool.run(new KryoCallback<byte[]>() {
             @Override
             public byte[] execute(Kryo kryo) {

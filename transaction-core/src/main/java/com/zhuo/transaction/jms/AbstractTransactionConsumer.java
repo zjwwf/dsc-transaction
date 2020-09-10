@@ -1,7 +1,5 @@
 package com.zhuo.transaction.jms;
 
-import com.zhuo.transaction.TransactionManager;
-
 /**
  * describe:
  *

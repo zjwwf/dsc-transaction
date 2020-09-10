@@ -11,9 +11,7 @@ import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
 import java.security.SecureRandom;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * describe:
@@ -24,7 +22,7 @@ import java.util.Set;
 public class JedisClient {
 
     private static Logger logger = LoggerFactory.getLogger(JdbcTransactionRepository.class);
-    private ObjectSerializer serializer = null;
+    private ObjectSerializer<Object> serializer = null;
     private String host;
     private Integer maxIdle = 10;
     private Integer maxTotal = 100;
@@ -48,31 +46,44 @@ public class JedisClient {
         return jedisPoolConfig;
     }
 
-    public void set(String key,Object value){
+    public void hset(String key,String field,Object value){
         Jedis jedis = null;
         try {
             jedis = pool.getResource();
-            jedis.set(key.getBytes(),serializer.serialize(value));
+            jedis.hset(key.getBytes(),field.getBytes(),serializer.serialize(value));
         }catch (Exception e){
             logger.error(e.getMessage(),e);
-            throw new TransactionException("JedisClient set error,"+e.getMessage());
+            throw new TransactionException("JedisClient hset error,"+e.getMessage());
+        }finally {
+            closeJedis(jedis);
+        }
+    }
+    public void hmset(String key, Map<byte[],byte[]> value){
+        Jedis jedis = null;
+        try {
+            jedis = pool.getResource();
+            jedis.hmset(key.getBytes(),value);
+        }catch (Exception e){
+            logger.error(e.getMessage(),e);
+            e.printStackTrace();
+            throw new TransactionException("JedisClient hset error,"+e.getMessage());
         }finally {
             closeJedis(jedis);
         }
     }
 
-    public Object get(String key){
+    public Object hget(String key,String field){
         Jedis jedis = null;
         try {
             jedis = pool.getResource();
-            byte[] value = jedis.get(key.getBytes());
+            byte[] value = jedis.hget(key.getBytes(),field.getBytes());
             if(value == null){
                 return null;
             }
             return serializer.deserialize(value);
         }catch (Exception e){
             logger.error(e.getMessage(),e);
-            throw new TransactionException("JedisClient get error,"+e.getMessage());
+            throw new TransactionException("JedisClient hget error,"+e.getMessage());
         }finally {
             closeJedis(jedis);
         }
@@ -109,6 +120,19 @@ public class JedisClient {
         try {
             jedis = pool.getResource();
             Set<String> set = jedis.zrevrange(key, start, end);
+            return new ArrayList<>(set);
+        }catch (Exception e){
+            logger.error(e.getMessage(),e);
+            return null;
+        }finally {
+            closeJedis(jedis);
+        }
+    }
+    public List<String> zrange(String key,int start,int end){
+        Jedis jedis = null;
+        try {
+            jedis = pool.getResource();
+            Set<String> set = jedis.zrange(key, start, end);
             return new ArrayList<>(set);
         }catch (Exception e){
             logger.error(e.getMessage(),e);
@@ -207,8 +231,7 @@ public class JedisClient {
         JedisClient jedisClient = new JedisClient();
         jedisClient.setHost("127.0.0.1");
         jedisClient.init();
-//        jedisClient.testZadd();
-        List test = jedisClient.zrevrange("test", 0, 9);
-        System.out.println(test.size());
+        Object status = jedisClient.hget("dsc-transaction-12tqj6dwwndzaz6hjqh9ml4xn", "status");
+        System.out.println(status);
     }
 }

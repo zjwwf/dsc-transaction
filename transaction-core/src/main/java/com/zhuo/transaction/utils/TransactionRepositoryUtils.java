@@ -83,6 +83,19 @@ public class TransactionRepositoryUtils {
         return null;
     }
 
+    /**
+     * 根据id查找
+     * @param id
+     * @return
+     */
+    public static boolean exist(String id){
+        if(checkRepository()) {
+            TransactionRepository transactionRepository = FactoryBuilder.getSpringSingeltonBean(TransactionRepository.class);
+            return transactionRepository.exist(id);
+        }
+        return false;
+    }
+
     private static boolean checkRepository(){
         TransactionRepository transactionRepository = FactoryBuilder.getSpringSingeltonBean(TransactionRepository.class);
         if(transactionRepository == null){

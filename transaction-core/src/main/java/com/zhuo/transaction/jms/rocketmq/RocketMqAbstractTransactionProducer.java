@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.concurrent.*;
 
 /**
- * describe:
+ * describe: rocketmq 发送者
  *
  * @author zhuojing
  * @date 2020/08/19
@@ -56,8 +56,6 @@ public class RocketMqAbstractTransactionProducer extends AbstractTransactionProd
         ZookeeperUtils.registerChildrenWatcher(Contants.BASE_ZOOKEEPER_SERVICE_DIR.substring(1,Contants.BASE_ZOOKEEPER_SERVICE_DIR.length()-1));
         ZookeeperUtils.cacheParticipantService();
         transactionListener = new TransactionListenerImpl();
-        List<String> children = ZookeeperUtils.getChildren(Contants.BASE_ZOOKEEPER_SERVICE_DIR.substring(0, Contants.BASE_ZOOKEEPER_SERVICE_DIR.length() - 1));
-//        String groupId = children.stream().map(s -> super.GROUP_ID + "_" + s).collect(Collectors.joining("|"));
         producer = new TransactionMQProducer(super.GROUP_ID);
         producer.setSendMsgTimeout(super.sendMsgTime);
         producer.setNamesrvAddr(namesrvAddr);
@@ -89,7 +87,7 @@ public class RocketMqAbstractTransactionProducer extends AbstractTransactionProd
             if(!participantStartOrNot(participantServiceList)){
                 //读取一次zookeeper，再次确认
                 if(!participantStartOrNotAgain(participantServiceList)){
-                    throw new TransactionException("参与者没有启动");
+                    throw new TransactionException("TcParticipant service is not started");
                 }
             }
             //执行事务方法
@@ -107,7 +105,7 @@ public class RocketMqAbstractTransactionProducer extends AbstractTransactionProd
             }
         }catch (Exception e){
             logger.error(e.getMessage(),e);
-            if(TransactionRepositoryUtils.getById(transaction.getId()) != null){
+            if(TransactionRepositoryUtils.exist(transaction.getId())){
                 TransactionRepositoryUtils.updateStatus(transaction.getId(), TransactionMsgStatusEnum.code_3.getCode());
             }
             throw new TransactionException(e.getMessage());
@@ -140,7 +138,6 @@ public class RocketMqAbstractTransactionProducer extends AbstractTransactionProd
                 break;
             }
         }
-
         return r;
     }
     public void setZkServer(String zkServer) {

@@ -25,7 +25,7 @@ public class JdbcTransactionRepository extends AbstractCachableTransactionReposi
     private DataSource dataSource;
 
     private String tableName = "dsc_transaction";
-    private ObjectSerializer serializer = null;
+    private ObjectSerializer<Object> serializer = null;
 
     public JdbcTransactionRepository(DataSource dataSource){
         this.dataSource = dataSource;
@@ -204,6 +204,15 @@ public class JdbcTransactionRepository extends AbstractCachableTransactionReposi
             releaseConnection(connection);
         }
         return result;
+    }
+
+    @Override
+    protected boolean doexist(String transactionId) {
+        Transaction transaction = getById(transactionId);
+        if(transaction != null){
+            return true;
+        }
+        return false;
     }
 
     private Transaction buildTransaction(ResultSet resultSet) throws SQLException{
