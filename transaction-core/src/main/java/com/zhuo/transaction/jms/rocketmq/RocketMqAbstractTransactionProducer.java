@@ -2,8 +2,6 @@ package com.zhuo.transaction.jms.rocketmq;
 
 import com.zhuo.transaction.MqMsg;
 import com.zhuo.transaction.Transaction;
-import com.zhuo.transaction.TransactionManager;
-import com.zhuo.transaction.TransactionRepository;
 import com.zhuo.transaction.cache.ParticipantServiceCache;
 import com.zhuo.transaction.cache.ProducerExecuteCache;
 import com.zhuo.transaction.common.commonEnum.TransactionMsgStatusEnum;
@@ -26,7 +24,6 @@ import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.concurrent.*;
-import java.util.stream.Collectors;
 
 /**
  * describe:
