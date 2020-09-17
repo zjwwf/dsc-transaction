@@ -68,6 +68,8 @@ public abstract class AbstractCachableTransactionRepositor implements Transactio
         return doGetFailTranMsgList();
     }
 
+
+
     @Override
     public List<Transaction> getSuccessTranMsgList() {
         return null;
@@ -98,5 +100,7 @@ public abstract class AbstractCachableTransactionRepositor implements Transactio
     public void setQueryListNum(Integer queryListNum){
         this.queryListNum = queryListNum;
     }
+
+
 
 }

@@ -77,14 +77,14 @@ public class RedisTransactionRepository extends AbstractCachableTransactionRepos
             value.put("updateTime".getBytes(), serializer.serialize(transaction.getUpdateTime()));
         }
         jedisClient.hmset(keyPrefix+transaction.getId(),value);
-        if(transaction.getStatus()!= null && transaction.getStatus() == TransactionMsgStatusEnum.code_3.getCode()){
+        if(transaction.getStatus()!= null && (transaction.getStatus() == TransactionMsgStatusEnum.code_3.getCode() || transaction.getStatus() == TransactionMsgStatusEnum.code_4.getCode())){
             jedisClient.zadd(errorKey,transaction.getId(),getScore());
         }
     }
 
     @Override
     protected void doUpdateStatus(String transactionId, int statusCode) {
-        if(statusCode == TransactionMsgStatusEnum.code_3.getCode()){
+        if(statusCode == TransactionMsgStatusEnum.code_3.getCode() || statusCode == TransactionMsgStatusEnum.code_4.getCode()){
             if(jedisClient.zcard(errorKey) > maxErrorNum){
                 throw new TransactionException("redis transaction error num is greater than "+maxErrorNum);
             }
@@ -236,6 +236,18 @@ public class RedisTransactionRepository extends AbstractCachableTransactionRepos
     @Override
     public void init() {
 
+    }
+
+    @Override
+    public Integer getStatusById(String transactionId) {
+        if(StringUtils.isBlank(transactionId)){
+            return null;
+        }
+        Object status = jedisClient.hget(keyPrefix + transactionId, "status");
+        if(status instanceof Integer){
+            return (Integer)status;
+        }
+        return null;
     }
 
     private double getScore(){

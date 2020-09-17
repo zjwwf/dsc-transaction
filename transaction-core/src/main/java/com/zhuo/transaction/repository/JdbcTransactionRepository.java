@@ -5,6 +5,7 @@ import com.zhuo.transaction.common.exception.TransactionException;
 import com.zhuo.transaction.common.utils.DateUtils;
 import com.zhuo.transaction.serializer.KryoPoolSerializer;
 import com.zhuo.transaction.serializer.ObjectSerializer;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -68,6 +69,19 @@ public class JdbcTransactionRepository extends AbstractCachableTransactionReposi
             releaseConnection(connection);
         }
     }
+
+    @Override
+    public Integer getStatusById(String transactionId) {
+        if(StringUtils.isBlank(transactionId)){
+            return null;
+        }
+        Transaction tc = getById(transactionId);
+        if(tc == null){
+            return null;
+        }
+        return tc.getStatus();
+    }
+
     @Override
     protected void doCreate(Transaction transaction) {
         String sql = "INSERT INTO dsc_transaction(id,body,try_time,`status`,cancal_method,cancal_method_param,confirm_method,confirm_method_param,transaction_type,create_time,update_time) VALUES(?,?,?,?,?,?,?,?,?,?,?)";
@@ -182,7 +196,7 @@ public class JdbcTransactionRepository extends AbstractCachableTransactionReposi
 
     @Override
     protected List<Transaction> doGetFailTranMsgList() {
-        String sql = "SELECT "+getColumns()+" FROM dsc_transaction WHERE `status` = 3 AND update_time < ? " +
+        String sql = "SELECT "+getColumns()+" FROM dsc_transaction WHERE `status` >= 3  AND update_time < ? " +
                 "and cancal_method is not null and  cancal_method != '' ORDER BY update_time  LIMIT "+super.queryListNum;
         Connection  connection = null;
         PreparedStatement stmt = null;

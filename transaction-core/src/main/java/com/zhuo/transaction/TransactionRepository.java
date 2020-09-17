@@ -59,4 +59,6 @@ public interface TransactionRepository {
     List<Transaction> getSuccessTranMsgList();
 
     boolean exist(String transactionId);
+
+    Integer getStatusById(String transactionId);
 }

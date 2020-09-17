@@ -12,7 +12,9 @@ public enum TransactionMsgStatusEnum {
      */
     code_1(1,"未结束"),
     code_2(2,"已结束"),
-    code_3(3,"出现异常");
+    code_3(3,"出现异常"),
+    code_4(4,"已发送");
+
 
     private int code;
     private String description;

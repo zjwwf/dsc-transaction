@@ -5,10 +5,12 @@ import com.zhuo.transaction.Transaction;
 import com.zhuo.transaction.cache.ConsumerMethodInfoCache;
 import com.zhuo.transaction.cache.ConsumerMsgExecuteCache;
 import com.zhuo.transaction.common.commonEnum.TransactionMsgStatusEnum;
+import com.zhuo.transaction.common.commonEnum.TransactionTypeEnum;
 import com.zhuo.transaction.common.exception.JsonParseException;
 import com.zhuo.transaction.common.utils.Contants;
 import com.zhuo.transaction.common.utils.ObjectMapperUtils;
 import com.zhuo.transaction.support.FactoryBuilder;
+import com.zhuo.transaction.utils.CommonUtils;
 import com.zhuo.transaction.utils.TransactionRepositoryUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyContext;
@@ -17,6 +19,7 @@ import org.apache.rocketmq.client.consumer.listener.MessageListenerConcurrently;
 import org.apache.rocketmq.common.message.MessageExt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.transaction.TransactionStatus;
 
 import java.lang.reflect.Method;
 import java.util.List;
@@ -33,17 +36,14 @@ public class ConsumerMessageListener implements MessageListenerConcurrently {
     private static Logger logger = LoggerFactory.getLogger(ConsumerMessageListener.class);
     private long st = 0L;
     public ConsumerMessageListener(){
-
-    }
-    public ConsumerMessageListener(long st){
-        this.st = st;
+        this.st = System.currentTimeMillis();
     }
     @Override
     public ConsumeConcurrentlyStatus consumeMessage(List<MessageExt> list, ConsumeConcurrentlyContext consumeConcurrentlyContext) {
 
         for(MessageExt msg : list){
             if(msg.getStoreTimestamp() < st){
-                continue;
+                return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
             }
             String transactionId = null;
             try {
@@ -58,8 +58,12 @@ public class ConsumerMessageListener implements MessageListenerConcurrently {
                 for (Map.Entry<String, List<MqMsg.MethodParam>> entry : mqmsg.getMap().entrySet()){
                     String methodkey = entry.getKey();
                     List<MqMsg.MethodParam> value = entry.getValue();
-                    executeMethod(methodkey,value);
+                    CommonUtils.executeMethod(methodkey,value);
                     ConsumerMsgExecuteCache.set(transaction.getId(),transaction.getId());
+                }
+                Integer status = TransactionRepositoryUtils.getStatusById(transactionId);
+                if(status != null && status == TransactionMsgStatusEnum.code_4.getCode()){
+                    TransactionRepositoryUtils.updateStatus(transactionId, TransactionMsgStatusEnum.code_2.getCode());
                 }
             }catch (JsonParseException e){
                 logger.error(e.getMessage(),e);
@@ -76,43 +80,5 @@ public class ConsumerMessageListener implements MessageListenerConcurrently {
         return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
     }
 
-    /**
-     * 执行方法
-     * @param methodkey
-     * @param value
-     * @throws Exception
-     */
-   private void executeMethod(String methodkey, List<MqMsg.MethodParam> value) throws Exception{
-        //判断是否是次参与者的方法
-       String methodInfo = ConsumerMethodInfoCache.get(methodkey);
-       if(StringUtils.isNotBlank(methodInfo)){
-           int index = methodInfo.lastIndexOf(".");
-           String className = methodInfo.substring(0, index);
-           String methodName = methodInfo.substring(index+1, methodInfo.length());
-           System.out.println("executeMethod,"+className+"-->"+methodName);
-           Class clazz = Class.forName(className);
-           //尝试从spring中获取类实例
-           Object target = FactoryBuilder.factoryOf(clazz, clazz).getInstance();
-           //获取类的所有方法
-           Method[] methods = clazz.getMethods();
-           for(Method method : methods){
-               if(method.getName().equals(methodName)){
-                   if(value == null || value.size() == 0){
-                       method.invoke(target);
-                   }else{
-                       //准备参数，执行方法
-                       Object[] params  = new Object[value.size()];
-                       for(int i = 0 ; i < value.size() ; i++){
-                           MqMsg.MethodParam methodParam = value.get(i);
-                           Object o = ObjectMapperUtils.parseJson(methodParam.getValue(), methodParam.getClazzType());
-                           params[i] = o;
-                       }
-                       method.invoke(target,params);
-                   }
-                   break;
-               }
-           }
-       }
 
-   }
 }
