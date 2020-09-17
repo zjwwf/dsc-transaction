@@ -22,17 +22,8 @@ import java.util.Date;
  */
 public class TcInitiatorInterceptor {
 
-//    private TransactionManager tc = null;
-
-//    public void init(){
-////        this.tc = new TransactionManager();
-//    }
 
     public Object interceptCompensableMethod(ProceedingJoinPoint pjp, AbstractTransactionProducer transactionProducer) throws Throwable {
-//        if(tc == null){
-//           throw new TransactionException("transactionManager is empty");
-//        }
-//        tc.clear();
         //构造TcServiceContext
         TcServiceContext tcServiceContext = new TcServiceContext(pjp);
         Method method = tcServiceContext.getMethod();
@@ -42,11 +33,9 @@ public class TcInitiatorInterceptor {
                 method.getParameterTypes(), pjp.getArgs());
         Participant participant  = new Participant(paramInfoInvocation);
         participant.buildParamInfo(tcServiceContext);
-//        this.tc.setTcServiceContext(tcServiceContext);
         //构造TcInitiatorContext
         TcInitiatorContext tcInitiatorContext = new TcInitiatorContext();
         tcInitiatorContext.buildParamContent(tcServiceContext.getMethod(),tcServiceContext.getPjp());
-//        this.tc.setTcInitiatorContext(tcInitiatorContext);
         //发送消息
         transactionProducer.sendTcMsg(tcServiceContext,getTransaction(tcServiceContext,tcInitiatorContext));
         return null;

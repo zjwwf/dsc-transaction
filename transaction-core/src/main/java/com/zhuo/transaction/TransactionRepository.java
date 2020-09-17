@@ -57,4 +57,6 @@ public interface TransactionRepository {
      * @return
      */
     List<Transaction> getSuccessTranMsgList();
+
+    boolean exist(String transactionId);
 }
