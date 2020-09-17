@@ -8,9 +8,11 @@ target
 .classpath
 *.class
 bin/
-.iml
 *.ipr
 *.iws
+*.iml
+*.iws
+*.ids
 /*.iml
 .orig
 *.iml
