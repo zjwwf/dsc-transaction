@@ -132,4 +132,11 @@ public class TransactionRepositoryUtils {
         return null;
     }
 
+    public static void addInitiatorSuccessNum(String transactionId){
+        if(checkRepository()){
+            TransactionRepository transactionRepository = FactoryBuilder.getSpringSingeltonBean(TransactionRepository.class);
+            transactionRepository.addInitiatorSuccessNum(transactionId);
+        }
+    }
+
 }

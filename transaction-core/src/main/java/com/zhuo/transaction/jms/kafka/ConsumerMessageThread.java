@@ -4,17 +4,16 @@ import com.zhuo.transaction.MqMsg;
 import com.zhuo.transaction.Transaction;
 import com.zhuo.transaction.cache.ConsumerMsgExecuteCache;
 import com.zhuo.transaction.common.commonEnum.TransactionMsgStatusEnum;
-import com.zhuo.transaction.common.utils.Contants;
 import com.zhuo.transaction.common.utils.ObjectMapperUtils;
 import com.zhuo.transaction.utils.CommonUtils;
 import com.zhuo.transaction.utils.TransactionRepositoryUtils;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
-import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.Map;
 
@@ -37,7 +36,7 @@ public class ConsumerMessageThread implements Runnable {
     public void run() {
         while (true) {
             try {
-                ConsumerRecords<String, String> records = kafkaConsumer.poll(100);
+                ConsumerRecords<String, String> records = kafkaConsumer.poll(Duration.ofMillis(500));
                 if(records.count() == 0){
                     Thread.currentThread().sleep(500);
                 }else{
@@ -64,10 +63,11 @@ public class ConsumerMessageThread implements Runnable {
                                 CommonUtils.executeMethod(methodkey, value);
                                 ConsumerMsgExecuteCache.set(transaction.getId(), transaction.getId());
                             }
-                            Integer status = TransactionRepositoryUtils.getStatusById(transactionId);
-                            if (status != null && status == TransactionMsgStatusEnum.code_4.getCode()) {
-                                TransactionRepositoryUtils.updateStatus(transactionId, TransactionMsgStatusEnum.code_2.getCode());
-                            }
+//                            Integer status = TransactionRepositoryUtils.getStatusById(transactionId);
+//                            if (status != null && status == TransactionMsgStatusEnum.code_4.getCode()) {
+//                                TransactionRepositoryUtils.updateStatus(transactionId, TransactionMsgStatusEnum.code_2.getCode());
+//                            }
+                            TransactionRepositoryUtils.addInitiatorSuccessNum(transactionId);
                         }catch (Exception e){
                             logger.error(e.getMessage(),e);
                             TransactionRepositoryUtils.updateStatus(transactionId, TransactionMsgStatusEnum.code_3.getCode());

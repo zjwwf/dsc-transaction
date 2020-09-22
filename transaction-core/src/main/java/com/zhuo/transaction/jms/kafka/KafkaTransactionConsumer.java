@@ -1,7 +1,9 @@
 package com.zhuo.transaction.jms.kafka;
 
 import com.fasterxml.jackson.databind.deser.std.StringDeserializer;
+import com.zhuo.transaction.common.exception.TransactionException;
 import com.zhuo.transaction.jms.AbstractTransactionConsumer;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
@@ -23,13 +25,18 @@ public class KafkaTransactionConsumer extends AbstractTransactionConsumer {
 
     private static Logger logger = LoggerFactory.getLogger(KafkaTransactionConsumer.class);
     private Map<Object,Object> config = null;
+
+    public KafkaTransactionConsumer(String namesrvAddr){
+        super.namesrvAddr = namesrvAddr;
+    }
+
     @Override
     public void start() {
         super.start();
         Properties p = new Properties();
         p.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, super.namesrvAddr);
-        p.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-        p.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+        p.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG,"org.apache.kafka.common.serialization.StringDeserializer");
+        p.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG,"org.apache.kafka.common.serialization.StringDeserializer");
         p.put(ConsumerConfig.GROUP_ID_CONFIG, super.GROUP_ID+"_"+serviceName);
         //自定义配置
         if(config != null && config.size() > 0){
@@ -48,4 +55,6 @@ public class KafkaTransactionConsumer extends AbstractTransactionConsumer {
     public void setConfig(Map<Object, Object> config) {
         this.config = config;
     }
+
+
 }

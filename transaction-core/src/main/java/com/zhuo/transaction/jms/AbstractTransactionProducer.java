@@ -25,6 +25,7 @@ public abstract class AbstractTransactionProducer {
     protected final String GROUP_ID = "dsc_transaction_group_id";
     protected final String TOPIC = "dsc_transaction_topic_id";
     private String zkServer = null;
+    protected String namesrvAddr;
     /**
      * 发送消息
      * @param
@@ -33,8 +34,11 @@ public abstract class AbstractTransactionProducer {
     public abstract void sendTcMsg(TcServiceContext tcServiceContext, Transaction transaction);
 
     public void init(){
+        if(StringUtils.isBlank(namesrvAddr)){
+            throw new TransactionException("TransactionProducer namesrvAddr is empty");
+        }
         if(StringUtils.isBlank(zkServer)){
-            throw new TransactionException("producer not set zookeeper url");
+            throw new TransactionException("TransactionProducer zkServer is empty");
         }
         //zk
         if(ZookeeperUtils.zookeeper == null){
@@ -70,5 +74,10 @@ public abstract class AbstractTransactionProducer {
     }
     public void setZkServer(String zkServer) {
         this.zkServer = zkServer;
+    }
+
+
+    public void setNamesrvAddr(String namesrvAddr) {
+        this.namesrvAddr = namesrvAddr;
     }
 }

@@ -50,7 +50,7 @@ public abstract class AbstractCachableTransactionRepositor implements Transactio
     @Override
     public void addTryTime(String transactionId) {
         if(StringUtils.isBlank(transactionId)){
-            throw new TransactionException("TransactionRepository updateStatus addTryTime is empty");
+            throw new TransactionException("TransactionRepository addTryTime  transactionId is empty");
         }
         doAddTryTime(transactionId);
     }
@@ -68,7 +68,13 @@ public abstract class AbstractCachableTransactionRepositor implements Transactio
         return doGetFailTranMsgList();
     }
 
-
+    @Override
+    public void addInitiatorSuccessNum(String transactionId) {
+        if(StringUtils.isBlank(transactionId)){
+            throw new TransactionException("TransactionRepository addInitiatorSuccessNum  transactionId is empty");
+        }
+        doAddInitiatorSuccessNum(transactionId);
+    }
 
     @Override
     public List<Transaction> getSuccessTranMsgList() {
@@ -96,6 +102,8 @@ public abstract class AbstractCachableTransactionRepositor implements Transactio
     protected abstract List<Transaction> doGetFailTranMsgList();
 
     protected abstract boolean doexist(String transactionId);
+
+    protected abstract void doAddInitiatorSuccessNum(String transactionId);
 
     public void setQueryListNum(Integer queryListNum){
         this.queryListNum = queryListNum;

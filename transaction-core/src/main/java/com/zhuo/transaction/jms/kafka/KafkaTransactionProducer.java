@@ -30,16 +30,15 @@ import java.util.Properties;
 public class KafkaTransactionProducer extends AbstractTransactionProducer {
 
     private static Logger logger = LoggerFactory.getLogger(KafkaTransactionProducer.class);
-    private String namesrvAddr;
     private Map<Object,Object> config = null;
     private KafkaProducer<String, String> kafkaProducer = null;
-
+    public KafkaTransactionProducer(String namesrvAddr){
+        super.namesrvAddr = namesrvAddr;
+    }
     @Override
     public void init(){
+
         super.init();
-        if(StringUtils.isBlank(namesrvAddr)){
-            throw new TransactionException("kafka servers is empty");
-        }
         Properties p = new Properties();
         //kafka地址，多个地址用逗号分割
         p.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, namesrvAddr);
@@ -68,6 +67,7 @@ public class KafkaTransactionProducer extends AbstractTransactionProducer {
                     throw new TransactionException("TcParticipant service is not started");
                 }
             }
+            transaction.setInitiatorNum(participantServiceList.size());
             //执行事务方法
             tcServiceContext.proceed();
             //写入事务消息表
@@ -77,6 +77,7 @@ public class KafkaTransactionProducer extends AbstractTransactionProducer {
                 ProducerRecord<String,String> record = new ProducerRecord<String, String>(topic,sendMsg);
                 kafkaProducer.send(record);
             }
+            kafkaProducer.flush();
             //发送消息
             transaction.setStatus(TransactionMsgStatusEnum.code_4.getCode());
             TransactionRepositoryUtils.create(transaction);
@@ -84,14 +85,6 @@ public class KafkaTransactionProducer extends AbstractTransactionProducer {
             logger.error(e.getMessage(),e);
             fail(e,transaction);
         }
-    }
-
-    public String getNamesrvAddr() {
-        return namesrvAddr;
-    }
-
-    public void setNamesrvAddr(String namesrvAddr) {
-        this.namesrvAddr = namesrvAddr;
     }
 
     public Map<Object,Object> getConfig() {

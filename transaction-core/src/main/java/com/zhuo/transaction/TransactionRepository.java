@@ -60,5 +60,10 @@ public interface TransactionRepository {
 
     boolean exist(String transactionId);
 
+    /**
+     * 添加事务参与者调用成功次数
+     */
+    void addInitiatorSuccessNum(String transactionId);
+
     Integer getStatusById(String transactionId);
 }

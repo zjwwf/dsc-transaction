@@ -84,7 +84,7 @@ public class JdbcTransactionRepository extends AbstractCachableTransactionReposi
 
     @Override
     protected void doCreate(Transaction transaction) {
-        String sql = "INSERT INTO dsc_transaction(id,body,try_time,`status`,cancal_method,cancal_method_param,confirm_method,confirm_method_param,transaction_type,create_time,update_time) VALUES(?,?,?,?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO dsc_transaction(id,body,try_time,`status`,cancal_method,cancal_method_param,confirm_method,confirm_method_param,transaction_type,initiator_num,initiator_success_num,create_time,update_time) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)";
         Connection  connection = null;
         PreparedStatement stmt = null;
         try {
@@ -99,8 +99,10 @@ public class JdbcTransactionRepository extends AbstractCachableTransactionReposi
             stmt.setString(7,transaction.getConfirmMethod());
             stmt.setBytes(8,transaction.getConfirmMethodParam() == null ? null : serializer.serialize(transaction.getConfirmMethodParam()));
             stmt.setInt(9,transaction.getTransactionType());
-            stmt.setTimestamp(10,new java.sql.Timestamp(transaction.getCreateTime().getTime()));
-            stmt.setTimestamp(11,new java.sql.Timestamp(transaction.getUpdateTime().getTime()));
+            stmt.setInt(10,transaction.getInitiatorNum());
+            stmt.setInt(11,transaction.getInitiatorSuccessNum());
+            stmt.setTimestamp(12,new java.sql.Timestamp(transaction.getCreateTime().getTime()));
+            stmt.setTimestamp(13,new java.sql.Timestamp(transaction.getUpdateTime().getTime()));
             stmt.execute();
         }catch (Exception e){
             logger.error(e.getMessage(),e);
@@ -229,6 +231,26 @@ public class JdbcTransactionRepository extends AbstractCachableTransactionReposi
         return false;
     }
 
+    @Override
+    protected void doAddInitiatorSuccessNum(String transactionId) {
+        String sql = "UPDATE dsc_transaction SET initiator_success_num = initiator_success_num+1,update_time= ? WHERE id = ? ";
+        Connection  connection = null;
+        PreparedStatement stmt = null;
+        try {
+            connection = getConnection();
+            stmt = connection.prepareStatement(sql);
+            stmt.setTimestamp(1,new java.sql.Timestamp(System.currentTimeMillis()));
+            stmt.setString(2,transactionId);
+            stmt.executeUpdate();
+        }catch (Exception e){
+            logger.error(e.getMessage(),e);
+            throw new TransactionException("JdbcTransactionRepository doAddInitiatorSuccessNum error,"+e.getMessage());
+        }finally {
+            closeStatement(stmt);
+            releaseConnection(connection);
+        }
+    }
+
     private Transaction buildTransaction(ResultSet resultSet) throws SQLException{
         Transaction tc = new Transaction();
         tc.setId(resultSet.getString("id"));
@@ -255,6 +277,8 @@ public class JdbcTransactionRepository extends AbstractCachableTransactionReposi
                 logger.error("serializer fail，"+e.getMessage());
             }
         }
+        tc.setInitiatorNum(resultSet.getInt("initiator_num"));
+        tc.setInitiatorSuccessNum(resultSet.getInt("initiator_success_num"));
         tc.setCreateTime(resultSet.getDate("create_time"));
         tc.setUpdateTime(resultSet.getDate("update_time"));
         return tc;
@@ -290,7 +314,7 @@ public class JdbcTransactionRepository extends AbstractCachableTransactionReposi
 
 
     private String getColumns(){
-        return "`id`,`body`,`try_time`,`status`,`cancal_method`,`cancal_method_param`,`confirm_method`,`confirm_method_param`,`transaction_type`,`create_time`,`update_time`";
+        return "`id`,`body`,`try_time`,`status`,`cancal_method`,`cancal_method_param`,`confirm_method`,`confirm_method_param`,`transaction_type`,`initiator_num`,`initiator_success_num`,`create_time`,`update_time`";
     }
 
 

@@ -8,7 +8,7 @@ import com.zhuo.transaction.utils.ZookeeperUtils;
  * @author zhuojing
  * @date 2020/08/24
  */
-public class ZookeeperTest1 {
+public class ZookeeperTest {
 
     public static void main(String args[]){
         ZookeeperUtils.init("127.0.0.1:2181");

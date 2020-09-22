@@ -22,6 +22,8 @@ public class Transaction {
     private String confirmMethod;
     private Object[] confirmMethodParam;
     private Integer transactionType;
+    private Integer initiatorNum;
+    private Integer initiatorSuccessNum;
     private Date createTime;
     private Date updateTime;
 
@@ -111,5 +113,21 @@ public class Transaction {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public Integer getInitiatorNum() {
+        return initiatorNum;
+    }
+
+    public void setInitiatorNum(Integer initiatorNum) {
+        this.initiatorNum = initiatorNum;
+    }
+
+    public Integer getInitiatorSuccessNum() {
+        return initiatorSuccessNum;
+    }
+
+    public void setInitiatorSuccessNum(Integer initiatorSuccessNum) {
+        this.initiatorSuccessNum = initiatorSuccessNum;
     }
 }

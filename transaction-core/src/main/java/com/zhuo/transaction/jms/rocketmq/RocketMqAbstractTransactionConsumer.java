@@ -25,12 +25,14 @@ public class RocketMqAbstractTransactionConsumer extends AbstractTransactionCons
 
     private static Logger logger = LoggerFactory.getLogger(RocketMqAbstractTransactionConsumer.class);
 
-
+    public RocketMqAbstractTransactionConsumer(String namesrvAddr){
+        this.namesrvAddr = namesrvAddr;
+    }
     @Override
     public void start() {
 
+        super.start();
         try {
-            super.start();
             //启动mq消费者
             //01默认的消息消费FF者
             DefaultMQPushConsumer consumer = new DefaultMQPushConsumer(super.GROUP_ID+"_"+serviceName);

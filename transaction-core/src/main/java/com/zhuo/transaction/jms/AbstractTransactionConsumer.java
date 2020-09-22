@@ -33,8 +33,11 @@ public abstract class AbstractTransactionConsumer {
      *
      */
     public void start(){
+        if(StringUtils.isBlank(namesrvAddr)){
+            throw new TransactionException("TransactionConsumer namesrvAddr is empty");
+        }
         if(StringUtils.isBlank(zkServer) || StringUtils.isBlank(serviceName)){
-            throw new TransactionException("参与者没有配置zk地址");
+            throw new TransactionException("TransactionConsumer zkServer is empty");
         }
         try {
             //添加zookeeper节点

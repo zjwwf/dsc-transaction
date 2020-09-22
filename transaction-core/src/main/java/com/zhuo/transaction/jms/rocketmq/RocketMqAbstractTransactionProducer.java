@@ -31,14 +31,12 @@ public class RocketMqAbstractTransactionProducer extends AbstractTransactionProd
 
     private static Logger logger = LoggerFactory.getLogger(RocketMqAbstractTransactionConsumer.class);
 
-    private String namesrvAddr;
+
     private TransactionListener transactionListener;
     private TransactionMQProducer producer;
     private ExecutorService executorService;
-
-
     public RocketMqAbstractTransactionProducer(String namesrvAddr){
-        this.namesrvAddr = namesrvAddr;
+        super.namesrvAddr = namesrvAddr;
     }
     @Override
     public void init() {
@@ -78,6 +76,7 @@ public class RocketMqAbstractTransactionProducer extends AbstractTransactionProd
                     throw new TransactionException("TcParticipant service is not started");
                 }
             }
+            transaction.setInitiatorNum(participantServiceList.size());
             //执行事务方法
 //            if(ProducerExecuteCache.get(transaction.getId()) == null) {
             tcServiceContext.proceed();
