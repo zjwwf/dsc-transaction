@@ -27,10 +27,15 @@ public class TransactionMsgJob {
             List<Transaction> list = TransactionRepositoryUtils.getFailTranMsgList();
             if(list != null && list.size() > 0){
                 for(Transaction transaction : list){
+                    if(transaction.getInitiatorSuccessNum() >= transaction.getInitiatorNum() && TransactionMsgStatusEnum.code_4.getCode() == transaction.getStatus()){
+                        TransactionRepositoryUtils.updateStatus(transaction.getId(),TransactionMsgStatusEnum.code_2.getCode());
+                        continue;
+                    }
                     //判断最新的更新时间在一个小时之前(redis存储时候需要加这个判断)
                     if(transaction.getUpdateTime() != null && System.currentTimeMillis() - transaction.getUpdateTime().getTime() < 1000*60*60){
                         continue;
                     }
+
                     //获取取消方法名
                     String cancalMethod = transaction.getCancalMethod();
                     //获取参数

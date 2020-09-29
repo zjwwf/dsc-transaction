@@ -49,42 +49,44 @@ public class RedisTransactionRepository extends AbstractCachableTransactionRepos
         if(StringUtils.isNotBlank(transaction.getBody())) {
             value.put("body".getBytes(), serializer.serialize(transaction.getBody()));
         }
-        if(transaction.getTryTime() != null) {
-            value.put("tryTime".getBytes(), serializer.serialize(transaction.getTryTime()));
-        }
         if(transaction.getStatus() != null) {
             value.put("status".getBytes(), serializer.serialize(transaction.getStatus()));
         }
         if(StringUtils.isNotBlank(transaction.getCancalMethod())) {
-            value.put("cancalMethod".getBytes(), serializer.serialize(transaction.getCancalMethod()));
+            value.put("cancal_method".getBytes(), serializer.serialize(transaction.getCancalMethod()));
         }
         if(transaction.getCancalMethodParam() != null) {
-            value.put("cancalMethodParam".getBytes(), serializer.serialize(transaction.getCancalMethodParam()));
+            value.put("cancal_method_param".getBytes(), serializer.serialize(transaction.getCancalMethodParam()));
         }
         if(StringUtils.isNotBlank(transaction.getConfirmMethod())) {
-            value.put("confirmMethod".getBytes(), serializer.serialize(transaction.getConfirmMethod()));
+            value.put("confirm_method".getBytes(), serializer.serialize(transaction.getConfirmMethod()));
         }
         if(transaction.getConfirmMethodParam() != null) {
-            value.put("confirmMethodParam".getBytes(), serializer.serialize(transaction.getConfirmMethodParam()));
+            value.put("confirm_method_param".getBytes(), serializer.serialize(transaction.getConfirmMethodParam()));
         }
         if(transaction.getTransactionType() != null) {
-            value.put("transactionType".getBytes(), serializer.serialize(transaction.getTransactionType()));
+            value.put("transaction_type".getBytes(), serializer.serialize(transaction.getTransactionType()));
         }
         if(transaction.getCreateTime() != null) {
-            value.put("createTime".getBytes(), serializer.serialize(transaction.getCreateTime()));
+            value.put("create_time".getBytes(), serializer.serialize(transaction.getCreateTime()));
         }
         if(transaction.getUpdateTime() != null) {
-            value.put("updateTime".getBytes(), serializer.serialize(transaction.getUpdateTime()));
+            value.put("update_time".getBytes(), serializer.serialize(transaction.getUpdateTime()));
         }
         jedisClient.hmset(keyPrefix+transaction.getId(),value);
-        if(transaction.getStatus()!= null && transaction.getStatus() == TransactionMsgStatusEnum.code_3.getCode()){
+        Map<String,String> strvalue = new HashMap<>();
+        strvalue.put("try_time", transaction.getTryTime() == null ? "0" : transaction.getTryTime().toString());
+        strvalue.put("initiator_num", transaction.getInitiatorNum() == null ? "0" : transaction.getInitiatorNum().toString());
+        strvalue.put("initiator_success_num", transaction.getInitiatorSuccessNum() == null ? "0":transaction.getInitiatorNum().toString());
+        jedisClient.hmsetStr(keyPrefix+transaction.getId(),strvalue);
+        if(transaction.getStatus()!= null && (transaction.getStatus() == TransactionMsgStatusEnum.code_3.getCode() || transaction.getStatus() == TransactionMsgStatusEnum.code_4.getCode())){
             jedisClient.zadd(errorKey,transaction.getId(),getScore());
         }
     }
 
     @Override
     protected void doUpdateStatus(String transactionId, int statusCode) {
-        if(statusCode == TransactionMsgStatusEnum.code_3.getCode()){
+        if(statusCode == TransactionMsgStatusEnum.code_3.getCode() || statusCode == TransactionMsgStatusEnum.code_4.getCode()){
             if(jedisClient.zcard(errorKey) > maxErrorNum){
                 throw new TransactionException("redis transaction error num is greater than "+maxErrorNum);
             }
@@ -96,7 +98,7 @@ public class RedisTransactionRepository extends AbstractCachableTransactionRepos
         Object o = jedisClient.hget(keyPrefix + transactionId,"id");
         if(o != null){
             jedisClient.hset(keyPrefix + transactionId,"status",statusCode);
-            jedisClient.hset(keyPrefix + transactionId,"updateTime",new Date());
+            jedisClient.hset(keyPrefix + transactionId,"update_time",new Date());
         }
     }
 
@@ -109,20 +111,15 @@ public class RedisTransactionRepository extends AbstractCachableTransactionRepos
     protected void doAddTryTime(String transactionId) {
         Object o = jedisClient.hget(keyPrefix + transactionId,"id");
         if(o != null){
-            Object tryTime = jedisClient.hget(keyPrefix + transactionId, "tryTime");
-            if(tryTime != null && tryTime instanceof  Integer){
-                jedisClient.hset(keyPrefix + transactionId, "tryTime",((Integer)tryTime)+1);
-            }else{
-                jedisClient.hset(keyPrefix + transactionId, "tryTime",1);
-            }
-            jedisClient.hset(keyPrefix + transactionId,"updateTime",new Date());
+            jedisClient.hincrBy(keyPrefix + transactionId, "try_time",1L);
+            jedisClient.hset(keyPrefix + transactionId,"update_time",new Date());
         }
     }
 
     @Override
     protected Transaction doGetById(String transactionId) {
-        return buildTransaction(Arrays.asList("id","body","tryTime","status","cancalMethod","cancalMethodParam"
-                ,"confirmMethod","confirmMethodParam","transactionType","createTime","updateTime")
+        return buildTransaction(Arrays.asList("id","body","try_time","status","cancal_method","cancal_method_param"
+                ,"confirm_method","confirm_method_param","transaction_type","initiator_num","initiator_success_num","create_time","update_time")
                 ,transactionId);
     }
 
@@ -136,7 +133,7 @@ public class RedisTransactionRepository extends AbstractCachableTransactionRepos
         List<Transaction> list = new ArrayList<>();
         if(ids != null && ids.size() > 0){
             for(String id : ids){
-                Transaction transaction = buildTransaction(Arrays.asList("id","cancalMethod","cancalMethodParam","updateTime"),id);
+                Transaction transaction = buildTransaction(Arrays.asList("id","status","cancal_method","cancal_method_param","update_time","initiator_num","initiator_success_num"),id);
                 if(transaction != null){
                     list.add(transaction);
                 }
@@ -152,6 +149,15 @@ public class RedisTransactionRepository extends AbstractCachableTransactionRepos
             return true;
         }
         return false;
+    }
+
+    @Override
+    protected void doAddInitiatorSuccessNum(String transactionId) {
+        Object o = jedisClient.hget(keyPrefix + transactionId,"id");
+        if(o != null){
+            jedisClient.hincrBy(keyPrefix + transactionId, "initiator_success_num",1L);
+            jedisClient.hset(keyPrefix + transactionId,"update_time",new Date());
+        }
     }
 
     private Transaction buildTransaction(List<String> columns,String transactionId){
@@ -173,10 +179,10 @@ public class RedisTransactionRepository extends AbstractCachableTransactionRepos
                         transaction.setBody((String) body);
                     }
                     break;
-                case "tryTime":
-                    Object tryTime = jedisClient.hget(keyPrefix + transactionId, "tryTime");
-                    if(tryTime instanceof Integer){
-                        transaction.setTryTime((Integer) tryTime);
+                case "try_time":
+                    String tryTime = jedisClient.hgetStr(keyPrefix + transactionId, "try_time");
+                    if(StringUtils.isNumeric(tryTime)){
+                        transaction.setTryTime(Integer.valueOf(tryTime));
                     }
                     break;
                 case "status":
@@ -185,46 +191,58 @@ public class RedisTransactionRepository extends AbstractCachableTransactionRepos
                         transaction.setStatus((Integer) status);
                     }
                     break;
-                case "cancalMethod":
-                    Object cancalMethod = jedisClient.hget(keyPrefix + transactionId, "cancalMethod");
+                case "cancal_method":
+                    Object cancalMethod = jedisClient.hget(keyPrefix + transactionId, "cancal_method");
                     if(cancalMethod instanceof String){
                         transaction.setCancalMethod((String) cancalMethod);
                     }
                     break;
-                case "cancalMethodParam":
-                    Object cancalMethodParam = jedisClient.hget(keyPrefix + transactionId, "cancalMethodParam");
+                case "cancal_method_param":
+                    Object cancalMethodParam = jedisClient.hget(keyPrefix + transactionId, "cancal_method_param");
                     if(cancalMethodParam instanceof Object[]){
                         transaction.setCancalMethodParam((Object[]) cancalMethodParam);
                     }
                     break;
-                case "confirmMethod":
-                    Object confirmMethod = jedisClient.hget(keyPrefix + transactionId, "confirmMethod");
+                case "confirm_method":
+                    Object confirmMethod = jedisClient.hget(keyPrefix + transactionId, "confirm_method");
                     if(confirmMethod instanceof String){
                         transaction.setConfirmMethod((String) confirmMethod);
                     }
                     break;
-                case "confirmMethodParam":
-                    Object confirmMethodParam = jedisClient.hget(keyPrefix + transactionId, "confirmMethodParam");
+                case "confirm_method_param":
+                    Object confirmMethodParam = jedisClient.hget(keyPrefix + transactionId, "confirm_method_param");
                     if(confirmMethodParam instanceof Object[]){
                         transaction.setConfirmMethodParam((Object[]) confirmMethodParam);
                     }
                     break;
-                case "transactionType":
-                    Object transactionType = jedisClient.hget(keyPrefix + transactionId, "transactionType");
+                case "transaction_type":
+                    Object transactionType = jedisClient.hget(keyPrefix + transactionId, "transaction_type");
                     if(transactionType instanceof Integer){
                         transaction.setTransactionType((Integer) transactionType);
                     }
                     break;
-                case "createTime":
-                    Object createTime = jedisClient.hget(keyPrefix + transactionId, "createTime");
+                case "create_time":
+                    Object createTime = jedisClient.hget(keyPrefix + transactionId, "create_time");
                     if(createTime instanceof Date){
                         transaction.setCreateTime((Date) createTime);
                     }
                     break;
-                case "updateTime":
-                    Object updateTime = jedisClient.hget(keyPrefix + transactionId, "updateTime");
+                case "update_time":
+                    Object updateTime = jedisClient.hget(keyPrefix + transactionId, "update_time");
                     if(updateTime instanceof Date){
                         transaction.setUpdateTime((Date) updateTime);
+                    }
+                    break;
+                case "initiator_num":
+                    String initiatorNum = jedisClient.hgetStr(keyPrefix + transactionId, "initiator_num");
+                    if(StringUtils.isNumeric(initiatorNum)){
+                        transaction.setInitiatorNum(Integer.valueOf(initiatorNum));
+                    }
+                     break;
+                case "initiator_success_num":
+                    String initiatorSuccessNum = jedisClient.hgetStr(keyPrefix + transactionId, "initiator_success_num");
+                    if(StringUtils.isNumeric(initiatorSuccessNum)){
+                        transaction.setInitiatorSuccessNum(Integer.valueOf(initiatorSuccessNum));
                     }
                     break;
                 default:break;
@@ -236,6 +254,18 @@ public class RedisTransactionRepository extends AbstractCachableTransactionRepos
     @Override
     public void init() {
 
+    }
+
+    @Override
+    public Integer getStatusById(String transactionId) {
+        if(StringUtils.isBlank(transactionId)){
+            return null;
+        }
+        Object status = jedisClient.hget(keyPrefix + transactionId, "status");
+        if(status instanceof Integer){
+            return (Integer)status;
+        }
+        return null;
     }
 
     private double getScore(){

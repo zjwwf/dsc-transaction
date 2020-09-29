@@ -50,6 +50,5 @@ public class TcInitiatorContext {
         String className = method.getDeclaringClass().getName();
         this.cancalMethod = className+"."+methodName;
         this.cancalMethodParam = pjp.getArgs();
-        System.out.println(pjp.getArgs().length);
     }
 }

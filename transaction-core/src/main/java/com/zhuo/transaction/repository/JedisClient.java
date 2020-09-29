@@ -4,6 +4,8 @@ import com.zhuo.transaction.common.exception.TransactionException;
 import com.zhuo.transaction.common.utils.UuidUtils;
 import com.zhuo.transaction.serializer.KryoPoolSerializer;
 import com.zhuo.transaction.serializer.ObjectSerializer;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import redis.clients.jedis.Jedis;
@@ -24,13 +26,29 @@ public class JedisClient {
     private static Logger logger = LoggerFactory.getLogger(JdbcTransactionRepository.class);
     private ObjectSerializer<Object> serializer = null;
     private String host;
+    private Integer port;
+    private String passWord;
     private Integer maxIdle = 10;
     private Integer maxTotal = 100;
     private Long maxWaitMillis = 3000L;
     private JedisPool pool = null;
 
+    public JedisClient(String host){
+        this.host = host;
+    }
+    public JedisClient(JedisPool jedisPool){
+        this.pool = jedisPool;
+    }
     public void init(){
-        pool =  new JedisPool(getPoolConfig(),host);
+        if(pool == null) {
+            if (port != null && StringUtils.isNotBlank(passWord)) {
+                pool = new JedisPool(getPoolConfig(), host, port, 5000, passWord);
+            } else if (port != null && StringUtils.isBlank(passWord)) {
+                pool = new JedisPool(getPoolConfig(), host, port);
+            } else {
+                pool = new JedisPool(getPoolConfig(), host);
+            }
+        }
         serializer = new KryoPoolSerializer();
     }
     public void destroy(){
@@ -72,6 +90,19 @@ public class JedisClient {
         }
     }
 
+    public void hincrBy(String key,String field,Long value){
+        Jedis jedis = null;
+        try {
+            jedis = pool.getResource();
+            jedis.hincrBy(key.getBytes(),field.getBytes(),value);
+        }catch (Exception e){
+            logger.error(e.getMessage(),e);
+            throw new TransactionException("JedisClient hset error,"+e.getMessage());
+        }finally {
+            closeJedis(jedis);
+        }
+    }
+
     public Object hget(String key,String field){
         Jedis jedis = null;
         try {
@@ -84,6 +115,31 @@ public class JedisClient {
         }catch (Exception e){
             logger.error(e.getMessage(),e);
             throw new TransactionException("JedisClient hget error,"+e.getMessage());
+        }finally {
+            closeJedis(jedis);
+        }
+    }
+    public String hgetStr(String key,String field){
+        Jedis jedis = null;
+        try {
+            jedis = pool.getResource();
+            return jedis.hget(key,field);
+        }catch (Exception e){
+            logger.error(e.getMessage(),e);
+            throw new TransactionException("JedisClient hgetStr error,"+e.getMessage());
+        }finally {
+            closeJedis(jedis);
+        }
+    }
+    public void hmsetStr(String key, Map<String,String> value){
+        Jedis jedis = null;
+        try {
+            jedis = pool.getResource();
+            jedis.hmset(key,value);
+        }catch (Exception e){
+            logger.error(e.getMessage(),e);
+            e.printStackTrace();
+            throw new TransactionException("JedisClient hmsetStr error,"+e.getMessage());
         }finally {
             closeJedis(jedis);
         }
@@ -227,11 +283,30 @@ public class JedisClient {
         this.maxWaitMillis = maxWaitMillis;
     }
 
+    public Integer getPort() {
+        return port;
+    }
+
+    public void setPort(Integer port) {
+        this.port = port;
+    }
+
+    public String getPassWord() {
+        return passWord;
+    }
+
+    public void setPassWord(String passWord) {
+        this.passWord = passWord;
+    }
+
+    public JedisPool getPool() {
+        return pool;
+    }
+
     public static void main(String[] args){
-        JedisClient jedisClient = new JedisClient();
-        jedisClient.setHost("127.0.0.1");
+        JedisClient jedisClient = new JedisClient("127.0.0.1");
         jedisClient.init();
-        Object status = jedisClient.hget("dsc-transaction-12tqj6dwwndzaz6hjqh9ml4xn", "status");
+        Object status = jedisClient.hget("dsc-transaction-sz8l2vkniuzcqvltxxc02i5q", "initiator_success_num");
         System.out.println(status);
     }
 }

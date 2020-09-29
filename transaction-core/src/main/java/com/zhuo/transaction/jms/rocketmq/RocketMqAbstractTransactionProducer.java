@@ -2,18 +2,13 @@ package com.zhuo.transaction.jms.rocketmq;
 
 import com.zhuo.transaction.MqMsg;
 import com.zhuo.transaction.Transaction;
-import com.zhuo.transaction.cache.ParticipantServiceCache;
-import com.zhuo.transaction.cache.ProducerExecuteCache;
-import com.zhuo.transaction.common.commonEnum.TransactionMsgStatusEnum;
 import com.zhuo.transaction.common.commonEnum.TransactionTypeEnum;
 import com.zhuo.transaction.common.exception.TransactionException;
-import com.zhuo.transaction.common.utils.Contants;
 import com.zhuo.transaction.common.utils.ObjectMapperUtils;
 import com.zhuo.transaction.context.TcServiceContext;
 import com.zhuo.transaction.jms.AbstractTransactionProducer;
 import com.zhuo.transaction.utils.TransactionRepositoryUtils;
 import com.zhuo.transaction.utils.ZookeeperUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.rocketmq.client.producer.SendResult;
 import org.apache.rocketmq.client.producer.TransactionListener;
 import org.apache.rocketmq.client.producer.TransactionMQProducer;
@@ -36,25 +31,16 @@ public class RocketMqAbstractTransactionProducer extends AbstractTransactionProd
 
     private static Logger logger = LoggerFactory.getLogger(RocketMqAbstractTransactionConsumer.class);
 
-    private String namesrvAddr;
+
     private TransactionListener transactionListener;
     private TransactionMQProducer producer;
     private ExecutorService executorService;
-    private String zkServer = null;
-
     public RocketMqAbstractTransactionProducer(String namesrvAddr){
-        this.namesrvAddr = namesrvAddr;
+        super.namesrvAddr = namesrvAddr;
     }
+    @Override
     public void init() {
-        if(StringUtils.isBlank(zkServer)){
-            throw new TransactionException("参与者没有配置zk地址");
-        }
-        //zk
-        if(ZookeeperUtils.zookeeper == null){
-            ZookeeperUtils.init(zkServer);
-        }
-        ZookeeperUtils.registerChildrenWatcher(Contants.BASE_ZOOKEEPER_SERVICE_DIR.substring(1,Contants.BASE_ZOOKEEPER_SERVICE_DIR.length()-1));
-        ZookeeperUtils.cacheParticipantService();
+        super.init();
         transactionListener = new TransactionListenerImpl();
         producer = new TransactionMQProducer(super.GROUP_ID);
         producer.setSendMsgTimeout(super.sendMsgTime);
@@ -84,17 +70,18 @@ public class RocketMqAbstractTransactionProducer extends AbstractTransactionProd
             MqMsg mqMsg = ObjectMapperUtils.parseJson(transaction.getBody(), MqMsg.class);
             List<String> participantServiceList = mqMsg.getParticipantService();
             //判断参与者是否启动
-            if(!participantStartOrNot(participantServiceList)){
+            if(!super.participantStartOrNot(participantServiceList)){
                 //读取一次zookeeper，再次确认
                 if(!participantStartOrNotAgain(participantServiceList)){
                     throw new TransactionException("TcParticipant service is not started");
                 }
             }
+            transaction.setInitiatorNum(participantServiceList.size());
             //执行事务方法
-            if(ProducerExecuteCache.get(transaction.getId()) == null) {
-                tcServiceContext.proceed();
-                ProducerExecuteCache.put(transaction.getId(),transaction.getId());
-            }
+//            if(ProducerExecuteCache.get(transaction.getId()) == null) {
+            tcServiceContext.proceed();
+//                ProducerExecuteCache.put(transaction.getId(),transaction.getId());
+//            }
             //写入事务消息表
             transaction.setTransactionType(TransactionTypeEnum.mq_rocketmq.getCode());
             TransactionRepositoryUtils.create(transaction);
@@ -105,10 +92,7 @@ public class RocketMqAbstractTransactionProducer extends AbstractTransactionProd
             }
         }catch (Exception e){
             logger.error(e.getMessage(),e);
-            if(TransactionRepositoryUtils.exist(transaction.getId())){
-                TransactionRepositoryUtils.updateStatus(transaction.getId(), TransactionMsgStatusEnum.code_3.getCode());
-            }
-            throw new TransactionException(e.getMessage());
+            fail(e,transaction);
         }
     }
 
@@ -122,27 +106,8 @@ public class RocketMqAbstractTransactionProducer extends AbstractTransactionProd
         return participantStartOrNot(participantServiceList);
     }
 
-    /**
-     * 判断参与者是否启动
-     * @param participantServiceList
-     * @return
-     */
-    private boolean participantStartOrNot(List<String> participantServiceList){
-        boolean r = true;
-        if(participantServiceList == null || participantServiceList.size() == 0){
-            r = false;
-        }
-        for(String p : participantServiceList){
-            if(ParticipantServiceCache.get(p) == null){
-                r = false;
-                break;
-            }
-        }
-        return r;
-    }
-    public void setZkServer(String zkServer) {
-        this.zkServer = zkServer;
-    }
+
+
 
     public void stop(){
         producer.shutdown();

@@ -59,4 +59,11 @@ public interface TransactionRepository {
     List<Transaction> getSuccessTranMsgList();
 
     boolean exist(String transactionId);
+
+    /**
+     * 添加事务参与者调用成功次数
+     */
+    void addInitiatorSuccessNum(String transactionId);
+
+    Integer getStatusById(String transactionId);
 }

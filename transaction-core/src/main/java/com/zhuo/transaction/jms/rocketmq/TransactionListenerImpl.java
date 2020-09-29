@@ -26,7 +26,7 @@ public class TransactionListenerImpl implements TransactionListener {
     public LocalTransactionState executeLocalTransaction(Message msg, Object arg) {
         Transaction transaction = (Transaction) arg;
         try {
-            TransactionRepositoryUtils.updateStatus(transaction.getId(), TransactionMsgStatusEnum.code_2.getCode());
+            TransactionRepositoryUtils.updateStatus(transaction.getId(), TransactionMsgStatusEnum.code_4.getCode());
             return LocalTransactionState.COMMIT_MESSAGE;
         }catch (Exception e){
             logger.error(e.getMessage(),e);

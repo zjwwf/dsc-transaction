@@ -5,7 +5,7 @@
     <parent>
         <artifactId>dsc-transaction</artifactId>
         <groupId>com.zhuo</groupId>
-        <version>1.0.0</version>
+        <version>2.0.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -16,12 +16,12 @@
         <dependency>
             <groupId>com.zhuo</groupId>
             <artifactId>transaction-common</artifactId>
-            <version>1.0.0</version>
+            <version>2.0.0</version>
         </dependency>
         <dependency>
             <groupId>com.zhuo</groupId>
             <artifactId>transaction-api</artifactId>
-            <version>1.0.0</version>
+            <version>2.0.0</version>
         </dependency>
         <dependency>
             <groupId>org.aspectj</groupId>
@@ -64,6 +64,12 @@
         <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-redis</artifactId>
+        </dependency>
+        <!--kafka -->
+        <dependency>
+            <groupId>org.apache.kafka</groupId>
+            <artifactId>kafka-clients</artifactId>
+            <version>2.6.0</version>
         </dependency>
     </dependencies>
 </project>

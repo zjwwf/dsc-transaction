@@ -24,31 +24,15 @@ import java.util.List;
 public class RocketMqAbstractTransactionConsumer extends AbstractTransactionConsumer {
 
     private static Logger logger = LoggerFactory.getLogger(RocketMqAbstractTransactionConsumer.class);
-    private String namesrvAddr;
-    private String basePackage;
-    private String zkServer;
-    private String serviceName;
 
+    public RocketMqAbstractTransactionConsumer(String namesrvAddr){
+        this.namesrvAddr = namesrvAddr;
+    }
     @Override
     public void start() {
-        if(StringUtils.isBlank(zkServer) || StringUtils.isBlank(serviceName)){
-            throw new TransactionException("参与者没有配置zk地址");
-        }
+
+        super.start();
         try {
-            zookeeperInit();
-            String path = null;
-            if(StringUtils.isNotBlank(this.basePackage)){
-                path = ReflectionUtils.getClassPath("/" + basePackage);
-            }else{
-                path = ReflectionUtils.getClassPath();
-            }
-            List<String> classList = ReflectionUtils.getClassesList(path);
-            for(String clazz : classList){
-                List<String> linklist = ReflectionUtils.gethasAnnotationMethod(clazz, TcParticipant.class);
-                for(String s : linklist){
-                    ConsumerMethodInfoCache.put(s,s);
-                }
-            }
             //启动mq消费者
             //01默认的消息消费FF者
             DefaultMQPushConsumer consumer = new DefaultMQPushConsumer(super.GROUP_ID+"_"+serviceName);
@@ -61,8 +45,7 @@ public class RocketMqAbstractTransactionConsumer extends AbstractTransactionCons
             //04订阅
             consumer.subscribe(super.TOPIC+"_"+serviceName,"*");
             //05注册监听器
-            consumer.registerMessageListener(new ConsumerMessageListener(System.currentTimeMillis()));
-
+            consumer.registerMessageListener(new ConsumerMessageListener());
             // 07开启
             consumer.start();
         }catch (Exception e){
@@ -70,48 +53,7 @@ public class RocketMqAbstractTransactionConsumer extends AbstractTransactionCons
         }
     }
 
-    private void zookeeperInit(){
-        if(ZookeeperUtils.zookeeper == null){
-            ZookeeperUtils.init(zkServer);
-        }
-        if(!ZookeeperUtils.hasExist(Contants.BASE_ZOOKEEPER_DIR.substring(0,Contants.BASE_ZOOKEEPER_DIR.length()-1))){
-            ZookeeperUtils.createNode(Contants.BASE_ZOOKEEPER_DIR.substring(0,Contants.BASE_ZOOKEEPER_DIR.length()-1),"",ZkNodeTypeEnum.zkNodeType_1.getCode());
-        }
-        if(!ZookeeperUtils.hasExist(Contants.BASE_ZOOKEEPER_SERVICE_DIR.substring(0,Contants.BASE_ZOOKEEPER_SERVICE_DIR.length()-1))){
-            ZookeeperUtils.createNode(Contants.BASE_ZOOKEEPER_SERVICE_DIR.substring(0,Contants.BASE_ZOOKEEPER_SERVICE_DIR.length()-1),"",ZkNodeTypeEnum.zkNodeType_1.getCode());
-        }
-        ZookeeperUtils.createNode(Contants.BASE_ZOOKEEPER_SERVICE_DIR+serviceName,serviceName, ZkNodeTypeEnum.zkNodeType_3.getCode());
-    }
 
-    public String getNamesrvAddr() {
-        return namesrvAddr;
-    }
 
-    public void setNamesrvAddr(String namesrvAddr) {
-        this.namesrvAddr = namesrvAddr;
-    }
 
-    public String getBasePackage() {
-        return basePackage;
-    }
-
-    public void setBasePackage(String basePackage) {
-        this.basePackage = basePackage;
-    }
-
-    public String getZkServer() {
-        return zkServer;
-    }
-
-    public void setZkServer(String zkServer) {
-        this.zkServer = zkServer;
-    }
-
-    public String getServiceName() {
-        return serviceName;
-    }
-
-    public void setServiceName(String serviceName) {
-        this.serviceName = serviceName;
-    }
 }

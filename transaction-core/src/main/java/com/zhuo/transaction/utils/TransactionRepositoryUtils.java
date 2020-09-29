@@ -124,4 +124,19 @@ public class TransactionRepositoryUtils {
         }
     }
 
+    public static Integer getStatusById(String transactionId){
+        if(checkRepository()) {
+            TransactionRepository transactionRepository = FactoryBuilder.getSpringSingeltonBean(TransactionRepository.class);
+            return transactionRepository.getStatusById(transactionId);
+        }
+        return null;
+    }
+
+    public static void addInitiatorSuccessNum(String transactionId){
+        if(checkRepository()){
+            TransactionRepository transactionRepository = FactoryBuilder.getSpringSingeltonBean(TransactionRepository.class);
+            transactionRepository.addInitiatorSuccessNum(transactionId);
+        }
+    }
+
 }
