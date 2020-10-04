@@ -1,12 +1,17 @@
 package com.zhuo.transaction.utils;
 
 import com.zhuo.transaction.MqMsg;
+import com.zhuo.transaction.Transaction;
 import com.zhuo.transaction.cache.ConsumerMethodInfoCache;
+import com.zhuo.transaction.common.commonEnum.TransactionMsgStatusEnum;
+import com.zhuo.transaction.common.commonEnum.TransactionTypeEnum;
 import com.zhuo.transaction.common.utils.ObjectMapperUtils;
+import com.zhuo.transaction.common.utils.UuidUtils;
 import com.zhuo.transaction.support.FactoryBuilder;
 import org.apache.commons.lang3.StringUtils;
 
 import java.lang.reflect.Method;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -55,5 +60,42 @@ public class CommonUtils {
                 }
             }
         }
+    }
+
+    public static void executeMethod(String className,String methodName,Object[] param) throws Exception{
+        Class clazz = Class.forName(className);
+        //尝试从spring中获取类实例
+        Object target = FactoryBuilder.factoryOf(clazz, clazz).getInstance();
+        Method[] methods = target.getClass().getMethods();
+        for(Method method : methods){
+            if(method.getName().equals(methodName)){
+                if(param == null || param.length == 0){
+                    method.invoke(target);
+                }else{
+                    method.invoke(target,param);
+                }
+                break;
+            }
+        }
+    }
+
+    /**
+     *  出错记录消息表方法
+     * @param confirmMethod
+     * @param cancelMethod
+     * @param args
+     */
+    public static void errorHandle(String confirmMethod,String cancelMethod,Object[] args){
+        Transaction transaction = new Transaction();
+        transaction.setId(UuidUtils.getId());
+        transaction.setStatus(TransactionMsgStatusEnum.code_3.getCode());
+        transaction.setUpdateTime(new Date());
+        transaction.setCreateTime(new Date());
+        transaction.setTransactionType(TransactionTypeEnum.tcc.getCode());
+        transaction.setConfirmMethodParam(args);
+        transaction.setConfirmMethod(confirmMethod);
+        transaction.setCancalMethodParam(args);
+        transaction.setCancalMethod(cancelMethod);
+        TransactionRepositoryUtils.create(transaction);
     }
 }

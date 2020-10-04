@@ -36,19 +36,12 @@ public class TcInitiatorAspect {
     }
 
     @Pointcut("@annotation(com.zhuo.transaction.api.TcInitiator)")
-    public void TcServiceAspect() {
+    public void tcInitiatorPointcut() {
 
     }
 
-    @Around("TcServiceAspect()")
-    public Object interceptCompensableMethod(ProceedingJoinPoint pjp) throws Throwable {
-        System.out.println("interceptCompensableMethod");
-//        Method method = ((MethodSignature) (pjp.getSignature())).getMethod();
-//        Class<?> declaringClass = method.getDeclaringClass();
-//        Class targetClass = ReflectionUtils.getDeclaringType(pjp.getTarget().getClass(), method.getName(), method.getParameterTypes());
-//        String name = targetClass.getName();
-//        Class<?>[] parameterTypes = method.getParameterTypes();
-//        Object[] args = pjp.getArgs();
-        return tcInitiatorInterceptor.interceptCompensableMethod(pjp,transactionProducer);
+    @Around("tcInitiatorPointcut()")
+    public Object interceptMethod(ProceedingJoinPoint pjp) throws Throwable {
+        return tcInitiatorInterceptor.interceptMethod(pjp,transactionProducer);
     }
 }

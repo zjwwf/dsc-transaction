@@ -4,6 +4,7 @@ import com.zhuo.transaction.Transaction;
 import com.zhuo.transaction.TransactionRepository;
 import com.zhuo.transaction.common.commonEnum.TransactionMsgStatusEnum;
 import com.zhuo.transaction.support.FactoryBuilder;
+import com.zhuo.transaction.utils.CommonUtils;
 import com.zhuo.transaction.utils.TransactionRepositoryUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -44,27 +45,15 @@ public class TransactionMsgJob {
                     int index = cancalMethod.lastIndexOf(".");
                     String className = cancalMethod.substring(0, index);
                     String methodName = cancalMethod.substring(index+1, cancalMethod.length());
-                    Class clazz = Class.forName(className);
-                    //尝试从spring中获取类实例
-                    Object target = FactoryBuilder.factoryOf(clazz, clazz).getInstance();
-                    Method[] methods = target.getClass().getMethods();
                     try {
-                        for(Method method : methods){
-                            if(method.getName().equals(methodName)){
-                                if(cancalMethodParam == null || cancalMethodParam.length == 0){
-                                    method.invoke(target);
-                                }else{
-                                    method.invoke(target,cancalMethodParam);
-                                }
-                                break;
-                            }
-                        }
+                        CommonUtils.executeMethod(className,methodName,cancalMethodParam);
                         TransactionRepositoryUtils.updateStatus(transaction.getId(), TransactionMsgStatusEnum.code_2.getCode());
                     }catch (Exception e){
                         logger.error("cancalMethod execute fail,id: {}",transaction.getId(),e);
                         TransactionRepositoryUtils.addTryTime(transaction.getId());
                         continue;
                     }
+
                 }
             }
             System.out.println("TransactionMsgJob run...");

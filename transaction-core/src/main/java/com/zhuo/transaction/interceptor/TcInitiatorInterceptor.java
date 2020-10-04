@@ -23,7 +23,7 @@ import java.util.Date;
 public class TcInitiatorInterceptor {
 
 
-    public Object interceptCompensableMethod(ProceedingJoinPoint pjp, AbstractTransactionProducer transactionProducer) throws Throwable {
+    public Object interceptMethod(ProceedingJoinPoint pjp, AbstractTransactionProducer transactionProducer) throws Throwable {
         //构造TcServiceContext
         TcServiceContext tcServiceContext = new TcServiceContext(pjp);
         Method method = tcServiceContext.getMethod();

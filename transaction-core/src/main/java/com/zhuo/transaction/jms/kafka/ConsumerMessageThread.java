@@ -63,10 +63,6 @@ public class ConsumerMessageThread implements Runnable {
                                 CommonUtils.executeMethod(methodkey, value);
                                 ConsumerMsgExecuteCache.set(transaction.getId(), transaction.getId());
                             }
-//                            Integer status = TransactionRepositoryUtils.getStatusById(transactionId);
-//                            if (status != null && status == TransactionMsgStatusEnum.code_4.getCode()) {
-//                                TransactionRepositoryUtils.updateStatus(transactionId, TransactionMsgStatusEnum.code_2.getCode());
-//                            }
                             TransactionRepositoryUtils.addInitiatorSuccessNum(transactionId);
                         }catch (Exception e){
                             logger.error(e.getMessage(),e);

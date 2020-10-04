@@ -13,13 +13,12 @@ import org.aspectj.lang.annotation.Pointcut;
 public class TcParticipantAspect {
 
     @Pointcut("@annotation(com.zhuo.transaction.api.TcParticipant)")
-    public void TcParticipantAspect() {
+    public void tcParticipantPointcut() {
 
     }
 
-    @Around("TcServiceAspect()")
-    public Object interceptCompensableMethod(ProceedingJoinPoint pjp) throws Throwable {
-        System.out.println("interceptCompensableMethod");
+    @Around("tcParticipantPointcut()")
+    public Object interceptMethod(ProceedingJoinPoint pjp) throws Throwable {
         return pjp.proceed();
     }
 }

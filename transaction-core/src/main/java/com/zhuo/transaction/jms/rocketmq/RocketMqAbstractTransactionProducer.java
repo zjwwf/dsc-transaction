@@ -78,10 +78,7 @@ public class RocketMqAbstractTransactionProducer extends AbstractTransactionProd
             }
             transaction.setInitiatorNum(participantServiceList.size());
             //执行事务方法
-//            if(ProducerExecuteCache.get(transaction.getId()) == null) {
             tcServiceContext.proceed();
-//                ProducerExecuteCache.put(transaction.getId(),transaction.getId());
-//            }
             //写入事务消息表
             transaction.setTransactionType(TransactionTypeEnum.mq_rocketmq.getCode());
             TransactionRepositoryUtils.create(transaction);
