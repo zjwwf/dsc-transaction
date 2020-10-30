@@ -1,5 +1,6 @@
 package com.zhuo.transaction;
 
+import com.zhuo.transaction.common.exception.TransactionException;
 import com.zhuo.transaction.utils.CommonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,6 +48,7 @@ public class TccTransactionRunnable implements Runnable {
                 logger.error(e.getMessage(),e);
                 CommonUtils.errorHandle(confirmMethod,cancelMethod,args);
             }
+            throw new TransactionException(e.getMessage());
         }
     }
 

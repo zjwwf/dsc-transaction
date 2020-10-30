@@ -3,6 +3,7 @@ package com.zhuo.transaction;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.Date;
+import java.util.Random;
 
 /**
  * describe:
@@ -120,6 +121,7 @@ public class Transaction {
     }
 
     public void setInitiatorNum(Integer initiatorNum) {
+
         this.initiatorNum = initiatorNum;
     }
 

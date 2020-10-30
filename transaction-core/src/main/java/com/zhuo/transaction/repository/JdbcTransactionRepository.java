@@ -99,8 +99,8 @@ public class JdbcTransactionRepository extends AbstractCachableTransactionReposi
             stmt.setString(7,transaction.getConfirmMethod());
             stmt.setBytes(8,transaction.getConfirmMethodParam() == null ? null : serializer.serialize(transaction.getConfirmMethodParam()));
             stmt.setInt(9,transaction.getTransactionType());
-            stmt.setInt(10,transaction.getInitiatorNum());
-            stmt.setInt(11,transaction.getInitiatorSuccessNum());
+            stmt.setInt(10,transaction.getInitiatorNum() == null ? 0 : transaction.getInitiatorNum());
+            stmt.setInt(11,transaction.getInitiatorSuccessNum() == null ? 0 : transaction.getInitiatorSuccessNum());
             stmt.setTimestamp(12,new java.sql.Timestamp(transaction.getCreateTime().getTime()));
             stmt.setTimestamp(13,new java.sql.Timestamp(transaction.getUpdateTime().getTime()));
             stmt.execute();

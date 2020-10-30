@@ -32,11 +32,12 @@ public class TccTransactionAspect {
         executorService = Executors.newFixedThreadPool(n);
     }
 
-    @Pointcut("@annotation(com.zhuo.transaction.api.TcInitiator)")
+    @Pointcut("@annotation(com.zhuo.transaction.api.TccTransaction)")
     public  void tccTransactionPointcut(){ }
 
     @Around("tccTransactionPointcut()")
     public void interceptMethod(ProceedingJoinPoint pjp){
+
         tccTransactionInterceptor.interceptMethod(pjp,executorService);
     }
 }
