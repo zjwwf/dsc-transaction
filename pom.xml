@@ -25,7 +25,7 @@
         <zookeeper.version>3.4.10</zookeeper.version>
         <esotericsoftware.version>4.0.2</esotericsoftware.version>
         <quartz.version>2.3.2</quartz.version>
-        <springframework.version>5.1.17.RELEASE</springframework.version>
+        <springframework.version>5.1.18.RELEASE</springframework.version>
         <project.version>2.0.0</project.version>
     </properties>
     <dependencies>
