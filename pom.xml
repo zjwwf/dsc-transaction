@@ -21,7 +21,7 @@
         <slf4j.version>1.7.9</slf4j.version>
         <commons-lang3.vsersion>3.9</commons-lang3.vsersion>
         <rocketmq.version>4.6.0</rocketmq.version>
-        <fasterxml.jackson.version>2.11.0</fasterxml.jackson.version>
+        <fasterxml.jackson.version>2.13.4.1</fasterxml.jackson.version>
         <zookeeper.version>3.4.10</zookeeper.version>
         <esotericsoftware.version>4.0.2</esotericsoftware.version>
         <quartz.version>2.3.2</quartz.version>
